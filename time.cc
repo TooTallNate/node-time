@@ -80,7 +80,7 @@ class Time
     obj->Set(String::NewSymbol("year"), Integer::New(timeinfo->tm_year) );
     obj->Set(String::NewSymbol("dayOfWeek"), Integer::New(timeinfo->tm_wday) );
     obj->Set(String::NewSymbol("dayOfYear"), Integer::New(timeinfo->tm_yday) );
-    obj->Set(String::NewSymbol("isDaylightSavings"), Integer::New(timeinfo->tm_isdst) );
+    obj->Set(String::NewSymbol("isDaylightSavings"), Boolean::New(timeinfo->tm_isdst > 0) );
 
     return scope.Close(obj);
   }
