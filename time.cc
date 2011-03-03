@@ -36,8 +36,30 @@ class Time
 
   static Handle<Value> tzset_(const Arguments& args)
   {
+    HandleScope scope;
+
+    // Set up the timezone info from the current TZ environ variable
     tzset();
-    return Undefined();
+
+    // Set up a return object that will hold the results of the timezone change
+    Local<Object> obj = Object::New();
+
+    // The 'tzname' char * [] gets put into a JS Array
+    int tznameLength = sizeof(tzname) / sizeof(int);
+    Local<Array> tznameArray = Array::New( tznameLength );
+    for (int i=0; i < tznameLength; i++) {
+      tznameArray->Set(Number::New(i), String::NewSymbol( tzname[i] ));
+    }
+    obj->Set(String::NewSymbol("tzname"), tznameArray);
+
+    // The 'timezone' long is the "seconds West of UTC"
+    obj->Set(String::NewSymbol("timezone"), Number::New( timezone ));
+
+    // The 'daylight' int is obselete actually, but I'll include it here for
+    // curiosity's sake. See the "Notes" section of "man tzset"
+    obj->Set(String::NewSymbol("daylight"), Number::New( daylight ));
+
+    return scope.Close(obj);
   }
 
   static Handle<Value> localtime_(const Arguments& args)
