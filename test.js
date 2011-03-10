@@ -31,3 +31,8 @@ assert.equal(d.getHours(), 16);
 d.setTimeZone("America/New_York");
 console.log("NY Hours: " + d.getHours());
 assert.equal(d.getHours(), 19);
+
+
+d.setTimeZone("US/Arizona");
+console.log("AZ Hours: " + d.getHours());
+assert.equal(d.getHours(), 17);
