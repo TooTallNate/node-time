@@ -45,7 +45,7 @@ class Time
     Local<Object> obj = Object::New();
 
     // The 'tzname' char * [] gets put into a JS Array
-    int tznameLength = sizeof(tzname) / sizeof(*tzname);
+    int tznameLength = sizeof(*tzname) / sizeof(int);
     Local<Array> tznameArray = Array::New( tznameLength );
     for (int i=0; i < tznameLength; i++) {
       tznameArray->Set(Number::New(i), String::NewSymbol( tzname[i] ));
