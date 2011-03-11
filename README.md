@@ -4,8 +4,8 @@ node-time
 
 
 This module offers simple bindings for the C [time.h][] APIs.
-It also extends the regular `Date` object with a `setTimeZone`
-function, which isn't normally part of JavaScript.
+It also offers an extended regular `Date` object with `getTimeZone()`
+and `setTimeZone()` functions, which aren't normally part of JavaScript.
 
 
 Example
@@ -14,7 +14,7 @@ Example
     var time = require('time');
 
     // Create a new Date instance
-    var now = new Date();
+    var now = new time.Date();
 
     now.setTimeZone("America/Los_Angeles");
     // `.getDate()`, `.getDay()`, `.getHours()`, etc.
@@ -24,26 +24,58 @@ Example
     // `.getDate()`, `.getDay()`, `.getHours()`, etc.
     // will return values according to UTC-5
 
-Be sure to request any additional features by creating a GitHub
-Issue requesting it!
-
 
 API
 ---
 
-The `time` module itself exports some functions as well:
 
+### Date() -> Date
+
+A special `Date` constructor that returns a "super" Date instance, that has
+magic _timezone_ capabilities!
+
+    var date = new time.Date();
+
+
+#### date.setTimeZone(timezone) -> Undefined
+
+Sets the timezone for the `Date` instance. Calls to `getHours()`, `getDays()`,
+`getMinutes()`, etc. will be relative to the timezone specified. This will throw
+an Error if information for the desired timezone could not be found.
+
+    date.setTimeZone("America/Argentina/San_Juan");
+
+
+#### date.getTimeZone() -> String
+
+Returns a String containing the currently configured timezone for the date instance.
+
+    date.getTimeZone();
+     // "America/Argentina/San_Juan"
 
 ### time() -> Number
 
-Binding for `time(3)`. Returns the number of seconds since Jan 1, 1900 UTC.
+Binding for `time()`. Returns the number of seconds since Jan 1, 1900 UTC.
+These two are equivalent:
+
+    time.time();
+     // 1299827226
+    Math.floor(Date.now() / 1000);
+     // 1299827226
 
 
-### tzset() -> Undefined
+### tzset(timezone) -> Object
 
-Binding for `tzset(3)`. Sets up the internal timezone information based on the
-current `process.env.TZ` value. This must be called after a change to the `TZ`
-environment variable.
+Binding for `tzset()`. Sets up the timezone information that `localtime()` will
+use based on the specified _timezone_ variable, or the current `process.env.TZ`
+value if none is specified. Returns an Object containing information about the
+newly set timezone, or throws an Error if no timezone information could be loaded
+for the specified timezone.
+
+    time.tzset('US/Pacific');
+     // { tzname: [ 'PST', 'PDT' ],
+     //   timezone: 28800,
+     //   daylight: 1 }
 
 
 ### localtime(Number) -> Object
@@ -52,6 +84,19 @@ Binding for `localtime()`. Accepts a Number with the number of seconds since the
 Epoch (i.e. the result of `time()`), and returns a "broken-down" Object
 representation of the timestamp, according the the currently configured timezone
 (see `tzset()`).
+
+    time.localtime(Date.now()/1000);
+     // { seconds: 38,
+     //   minutes: 7,
+     //   hours: 23,
+     //   dayOfMonth: 10,
+     //   month: 2,
+     //   year: 111,
+     //   dayOfWeek: 4,
+     //   dayOfYear: 68,
+     //   isDaylightSavings: false,
+     //   gmtOffset: -28800,
+     //   timezone: 'PST' }
 
 
 [Node]: http://nodejs.org
