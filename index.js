@@ -1,5 +1,7 @@
 var bindings = require('./time');
 
+exports.DAYS_OF_WEEK = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+exports.MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"]
 exports.time = bindings.time;
 exports.localtime = bindings.localtime;
 
@@ -31,11 +33,12 @@ var DateProto = global.Date.prototype;
 // to the time zone specified.
 function setTimeZone(timezone) {
   var oldTz = process.env.TZ;
-  tzset(timezone);
-  this._timezone = timezone;
+  var tz = tzset(timezone);
   var zoneInfo = bindings.localtime(this / 1000);
+  this._timezone = timezone;
   if (oldTz) {
     tzset(oldTz);
+    oldTz = null;
   }
 
   // If we got to here without throwing an Error, then
@@ -75,6 +78,30 @@ function setTimeZone(timezone) {
   this.getSeconds = function getSeconds() {
     return zoneInfo.seconds;
   }
+
+  this.toDateString = function toDateString() {
+    return exports.DAYS_OF_WEEK[this.getDay()].substring(0, 3) + ' ' + exports.MONTHS[this.getMonth()].substring(0, 3) + ' ' + this.getDate() + ' ' + this.getFullYear();
+  }
+
+  this.toTimeString = function toTimeString() {
+    var offset = zoneInfo.gmtOffset / 60 / 60;
+    return this.toLocaleTimeString() + ' GMT' + (offset >= 0 ? '+' : '-') + pad(Math.abs(offset * 100), 4)
+      + ' (' + tz.tzname[zoneInfo.isDaylightSavings ? 1 : 0] + ')';
+  }
+
+  this.toString = function toString() {
+    return this.toDateString() + ' ' + this.toTimeString();
+  }
+
+  this.toLocaleDateString = function toLocaleDateString() {
+    return exports.DAYS_OF_WEEK[this.getDay()] + ', ' + exports.MONTHS[this.getMonth()] + ' ' + this.getDate() + ', ' + this.getFullYear();
+  }
+
+  this.toLocaleTimeString = function toLocaleTimeString() {
+    return pad(this.getHours(), 2) + ':' + pad(this.getMinutes(), 2) + ':' + pad(this.getSeconds(), 2);
+  }
+
+  this.toLocaleString = this.toString;
 }
 Date.prototype.setTimeZone = DateProto.setTimeZone = setTimeZone;
 
@@ -87,3 +114,11 @@ Date.prototype.getTimeZone = DateProto.getTimeZone = getTimeZone;
 
 // Export the modified 'Date' instance in case NODE_MODULE_CONTEXTS is set.
 exports.Date = Date;
+
+
+// Pads a number with 0s if required
+function pad(num, padLen) {
+  var padding = '0000';
+  num = String(num);
+  return padding.substring(0, padLen - num.length) + num;
+}
