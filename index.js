@@ -76,11 +76,14 @@ function setTimeZone(timezone) {
     return zoneInfo.seconds;
   }
 }
-DateProto.setTimeZone = setTimeZone;
+Date.prototype.setTimeZone = DateProto.setTimeZone = setTimeZone;
 
 
 // Returns a "String" of the last value set in "setTimeZone".
 function getTimeZone() {
   return this._timezone;
 }
-DateProto.getTimeZone = getTimeZone;
+Date.prototype.getTimeZone = DateProto.getTimeZone = getTimeZone;
+
+// Export the modified 'Date' instance in case NODE_MODULE_CONTEXTS is set.
+exports.Date = Date;
