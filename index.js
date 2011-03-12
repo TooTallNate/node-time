@@ -80,7 +80,7 @@ function setTimeZone(timezone) {
   }
 
   this.toDateString = function toDateString() {
-    return exports.DAYS_OF_WEEK[this.getDay()].substring(0, 3) + ' ' + exports.MONTHS[this.getMonth()].substring(0, 3) + ' ' + this.getDate() + ' ' + this.getFullYear();
+    return exports.DAYS_OF_WEEK[this.getDay()].substring(0, 3) + ' ' + exports.MONTHS[this.getMonth()].substring(0, 3) + ' ' + pad(this.getDate(), 2) + ' ' + this.getFullYear();
   }
 
   this.toTimeString = function toTimeString() {
@@ -94,7 +94,7 @@ function setTimeZone(timezone) {
   }
 
   this.toLocaleDateString = function toLocaleDateString() {
-    return exports.DAYS_OF_WEEK[this.getDay()] + ', ' + exports.MONTHS[this.getMonth()] + ' ' + this.getDate() + ', ' + this.getFullYear();
+    return exports.DAYS_OF_WEEK[this.getDay()] + ', ' + exports.MONTHS[this.getMonth()] + ' ' + pad(this.getDate(), 2) + ', ' + this.getFullYear();
   }
 
   this.toLocaleTimeString = function toLocaleTimeString() {
