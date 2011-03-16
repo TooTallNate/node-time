@@ -9,9 +9,11 @@ var d = new Date(Date.UTC(2011, 0, 1));
 assert.equal(d.getUTCFullYear(), 2011);
 assert.equal(d.getUTCMonth(), 0);
 assert.equal(d.getUTCDate(), 1);
+console.log(d+'');
 
 
 d.setTimeZone("UTC");
+console.log(d+'');
 console.log("UTC Hours: " + d.getHours());
 assert.equal(d.getUTCDay(), d.getDay());
 assert.equal(d.getUTCDate(), d.getDate());
@@ -24,15 +26,18 @@ assert.equal(d.getUTCSeconds(), d.getSeconds());
 
 
 d.setTimeZone("America/Los_Angeles");
+console.log(d+'');
 console.log("LA Hours: " + d.getHours());
 assert.equal(d.getHours(), 16);
 
 
 d.setTimeZone("America/New_York");
+console.log(d+'');
 console.log("NY Hours: " + d.getHours());
 assert.equal(d.getHours(), 19);
 
 
 d.setTimeZone("US/Arizona");
+console.log(d+'');
 console.log("AZ Hours: " + d.getHours());
 assert.equal(d.getHours(), 17);
