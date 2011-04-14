@@ -76,9 +76,14 @@ function setTimezone(timezone) {
   this.getSeconds = function getSeconds() {
     return zoneInfo.seconds;
   }
-
+  // Returns the timezone offset from GMT the Date instance currently is in,
+  // in minutes. Also, left of GMT is positive, right of GMT is negative.
   this.getTimezoneOffset = function getTimezoneOffset() {
     return -zoneInfo.gmtOffset / 60;
+  }
+  // NON-STANDARD: Returns the abbreviation (e.g. EST, EDT) for the specified time zone.
+  this.getTimezoneAbbr = function getTimezoneAbbr() {
+    return tz.tzname[zoneInfo.isDaylightSavings ? 1 : 0];
   }
 
   this.toDateString = function toDateString() {
@@ -115,6 +120,14 @@ function getTimezone() {
   return this._timezone;
 }
 Date.prototype.getTimezone = Date.prototype.getTimeZone = getTimezone;
+
+// NON-STANDARD: I don't think we can implement this before 'setTimezone()'
+//               called, so until it is, throw an Error on the Date instance.
+function getTimezoneAbbr() {
+  throw new Error('You must call "setTimezone(tz)" before "getTimezoneAbbr()" may be called');
+}
+Date.prototype.getTimezoneAbbr = getTimezoneAbbr;
+
 
 // Export the modified 'Date' instance in case NODE_MODULE_CONTEXTS is set.
 exports.Date = Date;
