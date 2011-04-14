@@ -23,12 +23,14 @@ assert.equal(d.getUTCMilliseconds(), d.getMilliseconds());
 assert.equal(d.getUTCMinutes(), d.getMinutes());
 assert.equal(d.getUTCMonth(), d.getMonth());
 assert.equal(d.getUTCSeconds(), d.getSeconds());
+assert.equal(d.getTimezoneOffset(), 0);
 
 
 d.setTimeZone("America/Los_Angeles");
 console.log(d+'');
 console.log("LA Hours: " + d.getHours());
 assert.equal(d.getHours(), 16);
+assert.equal(d.getTimezoneOffset(), 480);
 
 
 d.setTimeZone("America/New_York");
