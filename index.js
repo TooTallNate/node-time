@@ -25,8 +25,6 @@ function tzset(tz) {
 }
 exports.tzset = tzset;
 
-var DateProto = global.Date.prototype;
-
 // The "setTimeZone" function is the "entry point" for a Date instance.
 // It must be called after an instance has been created. After, the 'getSeconds()',
 // 'getHours()', 'getDays()', etc. functions will return values relative
@@ -107,14 +105,14 @@ function setTimeZone(timezone) {
 
   this.toLocaleString = this.toString;
 }
-Date.prototype.setTimeZone = DateProto.setTimeZone = setTimeZone;
+Date.prototype.setTimeZone = setTimeZone;
 
 
 // Returns a "String" of the last value set in "setTimeZone".
 function getTimeZone() {
   return this._timezone;
 }
-Date.prototype.getTimeZone = DateProto.getTimeZone = getTimeZone;
+Date.prototype.getTimeZone = getTimeZone;
 
 // Export the modified 'Date' instance in case NODE_MODULE_CONTEXTS is set.
 exports.Date = Date;
