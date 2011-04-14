@@ -79,6 +79,10 @@ function setTimeZone(timezone) {
     return zoneInfo.seconds;
   }
 
+  this.getTimezoneOffset = function getTimezoneOffset() {
+    return -zoneInfo.gmtOffset / 60;
+  }
+
   this.toDateString = function toDateString() {
     return exports.DAYS_OF_WEEK[this.getDay()].substring(0, 3) + ' ' + exports.MONTHS[this.getMonth()].substring(0, 3) + ' ' + pad(this.getDate(), 2) + ' ' + this.getFullYear();
   }
