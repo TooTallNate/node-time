@@ -25,13 +25,11 @@ function tzset(tz) {
 }
 exports.tzset = tzset;
 
-var DateProto = global.Date.prototype;
-
-// The "setTimeZone" function is the "entry point" for a Date instance.
+// The "setTimezone" function is the "entry point" for a Date instance.
 // It must be called after an instance has been created. After, the 'getSeconds()',
 // 'getHours()', 'getDays()', etc. functions will return values relative
 // to the time zone specified.
-function setTimeZone(timezone) {
+function setTimezone(timezone) {
   var oldTz = process.env.TZ;
   var tz = tzset(timezone);
   var zoneInfo = bindings.localtime(this / 1000);
@@ -78,21 +76,21 @@ function setTimeZone(timezone) {
   this.getSeconds = function getSeconds() {
     return zoneInfo.seconds;
   };
-
-  this.toDateString = function toDateString() {
-    return exports.DAYS_OF_WEEK[this.getDay()].substring(0, 3) + ' ' + exports.MONTHS[this.getMonth()].substring(0, 3) + ' ' + pad(this.getDate(), 2) + ' ' + this.getFullYear();
+  // Returns the offset from UTC for the given timezone. This overrides the method inherited from Date, (as it is inaccurate).
+  this.getTimezoneOffset = function getTimezoneOffset() {
+    return -(zoneInfo.gmtOffset / 60);
   };
   //Returns the abbreviation (e.g. EST, EDT) for the specified time zone.
   this.getTimezoneAbbr = function getTimezoneAbbr() {
     return tz.tzname[zoneInfo.isDaylightSavings ? 1 : 0];
   };
-  // Returns the offset from UTC for the given timezone. This overrides the method inherited from Date, (as it is inaccurate).
-  this.getTimezoneOffset = function getTimezoneOffset() {
-    return -((zoneInfo.gmtOffset / 60 / 60) * 100);
+
+  this.toDateString = function toDateString() {
+    return exports.DAYS_OF_WEEK[this.getDay()].substring(0, 3) + ' ' + exports.MONTHS[this.getMonth()].substring(0, 3) + ' ' + pad(this.getDate(), 2) + ' ' + this.getFullYear();
   };
 
   this.toTimeString = function toTimeString() {
-    var offset = this.getTimezoneOffset();
+    var offset = (this.getTimezoneOffset() / 60) * 100;
     return this.toLocaleTimeString() + ' GMT' + (offset > 0 ? '-' : '+') + pad(offset, 4) + ' (' + this.getTimezoneAbbr() + ')';
   };
 
@@ -110,14 +108,16 @@ function setTimeZone(timezone) {
 
   this.toLocaleString = this.toString;
 }
-Date.prototype.setTimeZone = DateProto.setTimeZone = setTimeZone;
+Date.prototype.setTimezone = Date.prototype.setTimeZone = setTimezone;
 
 
-// Returns a "String" of the last value set in "setTimeZone".
-function getTimeZone() {
+// Returns a "String" of the last value set in "setTimezone".
+// TODO: Make this better. i.e. return something when 'setTimezone'
+//       hasn't been called yet.
+function getTimezone() {
   return this._timezone;
 }
-Date.prototype.getTimeZone = DateProto.getTimeZone = getTimeZone;
+Date.prototype.getTimezone = Date.prototype.getTimeZone = getTimezone;
 
 // Export the modified 'Date' instance in case NODE_MODULE_CONTEXTS is set.
 exports.Date = Date;
