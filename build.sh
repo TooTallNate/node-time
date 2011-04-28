@@ -2,3 +2,4 @@
 
 rm -rf build time.node;
 node-waf configure && node-waf build && cp ./build/default/time.node .;
+rm -rf build;
