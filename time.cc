@@ -89,16 +89,17 @@ class Time
 
     #elif defined HAVE_TIMEZONE
     long scd;
-    if (timeinfo->tm_isdst > 0)
+    if (timeinfo->tm_isdst > 0) {
       #ifdef HAVE_ALTZONE
       scd = -altzone;
       #else
       scd = -timezone + 3600;
       #endif // HAVE_ALTZONE
-    else
+    } else {
       scd = -timezone;
+    }
     obj->Set(String::NewSymbol("gmtOffset"), Integer::New(scd));
-    //obj->Set(String::NewSymbol("timezone"), Integer::New(abs(scd)));
+    obj->Set(String::NewSymbol("timezone"), String::NewSymbol(tzname[timeinfo->tm_isdst]));
     #endif // HAVE_TM_GMTOFF
 
     return scope.Close(obj);
