@@ -17,16 +17,13 @@ class Time
     HandleScope scope;
 
     // time(3)
-    Persistent<FunctionTemplate> s_time = Persistent<FunctionTemplate>::New(FunctionTemplate::New(Time_));
-    target->Set(String::NewSymbol("time"), s_time->GetFunction());
+    NODE_SET_METHOD(target, "time", Time_);
 
     // tzset(3)
-    Persistent<FunctionTemplate> s_tzset = Persistent<FunctionTemplate>::New(FunctionTemplate::New(tzset_));
-    target->Set(String::NewSymbol("tzset"), s_tzset->GetFunction());
+    NODE_SET_METHOD(target, "tzset", Tzset);
 
     // localtime
-    Persistent<FunctionTemplate> s_localtime = Persistent<FunctionTemplate>::New(FunctionTemplate::New(localtime_));
-    target->Set(String::NewSymbol("localtime"), s_localtime->GetFunction());
+    NODE_SET_METHOD(target, "localtime", Localtime);
   }
 
   static Handle<Value> Time_(const Arguments& args)
@@ -34,7 +31,7 @@ class Time
     return Integer::New(time(NULL));
   }
 
-  static Handle<Value> tzset_(const Arguments& args)
+  static Handle<Value> Tzset(const Arguments& args)
   {
     HandleScope scope;
 
@@ -62,7 +59,7 @@ class Time
     return scope.Close(obj);
   }
 
-  static Handle<Value> localtime_(const Arguments& args)
+  static Handle<Value> Localtime(const Arguments& args)
   {
     HandleScope scope;
 
@@ -83,11 +80,12 @@ class Time
     obj->Set(String::NewSymbol("isDaylightSavings"), Boolean::New(timeinfo->tm_isdst > 0) );
 
     #if defined HAVE_TM_GMTOFF
-    // Only available with glibc's "tm" struct
+    // Only available with glibc's "tm" struct. Most Linuxes, Mac OS X...
     obj->Set(String::NewSymbol("gmtOffset"), Integer::New(timeinfo->tm_gmtoff) );
     obj->Set(String::NewSymbol("timezone"), String::NewSymbol(timeinfo->tm_zone) );
 
     #elif defined HAVE_TIMEZONE
+    // Compatibility for Cygwin, Solaris, probably others...
     long scd;
     if (timeinfo->tm_isdst > 0) {
       #ifdef HAVE_ALTZONE
