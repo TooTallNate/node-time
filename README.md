@@ -4,8 +4,8 @@ node-time
 
 
 This module offers simple bindings for the C [time.h][] APIs.
-It also offers an extended regular `Date` object with `getTimeZone()`
-and `setTimeZone()` functions, which aren't normally part of JavaScript.
+It also offers an extended regular `Date` object with `getTimezone()`
+and `setTimezone()` functions, which aren't normally part of JavaScript.
 
 
 Example
@@ -16,11 +16,11 @@ Example
     // Create a new Date instance
     var now = new time.Date();
 
-    now.setTimeZone("America/Los_Angeles");
+    now.setTimezone("America/Los_Angeles");
     // `.getDate()`, `.getDay()`, `.getHours()`, etc.
     // will return values according to UTC-8
 
-    now.setTimeZone("America/New_York");
+    now.setTimezone("America/New_York");
     // `.getDate()`, `.getDay()`, `.getHours()`, etc.
     // will return values according to UTC-5
 
@@ -37,20 +37,20 @@ magic _timezone_ capabilities!
     var date = new time.Date();
 
 
-#### date.setTimeZone(timezone) -> Undefined
+#### date.setTimezone(timezone) -> Undefined
 
 Sets the timezone for the `Date` instance. Calls to `getHours()`, `getDays()`,
 `getMinutes()`, etc. will be relative to the timezone specified. This will throw
 an Error if information for the desired timezone could not be found.
 
-    date.setTimeZone("America/Argentina/San_Juan");
+    date.setTimezone("America/Argentina/San_Juan");
 
 
-#### date.getTimeZone() -> String
+#### date.getTimezone() -> String
 
 Returns a String containing the currently configured timezone for the date instance.
 
-    date.getTimeZone();
+    date.getTimezone();
      // "America/Argentina/San_Juan"
 
 ### time() -> Number

@@ -1,8 +1,6 @@
 var assert = require('assert');
 
-// The 'index.js' file extends "Date.prototype"
 var time = require('./');
-
 
 var d = new time.Date(Date.UTC(2011, 0, 1));
 
@@ -12,7 +10,7 @@ assert.equal(d.getUTCDate(), 1);
 console.log(d+'');
 
 
-d.setTimeZone("UTC");
+d.setTimezone("UTC");
 console.log(d+'');
 console.log("UTC Hours: " + d.getHours());
 assert.equal(d.getUTCDay(), d.getDay());
@@ -26,20 +24,23 @@ assert.equal(d.getUTCSeconds(), d.getSeconds());
 assert.equal(d.getTimezoneOffset(), 0);
 
 
-d.setTimeZone("America/Los_Angeles");
+d.setTimezone("America/Los_Angeles");
 console.log(d+'');
 console.log("LA Hours: " + d.getHours());
 assert.equal(d.getHours(), 16);
 assert.equal(d.getTimezoneOffset(), 480);
 
 
-d.setTimeZone("America/New_York");
+d.setTimezone("America/New_York");
 console.log(d+'');
 console.log("NY Hours: " + d.getHours());
 assert.equal(d.getHours(), 19);
 
 
-d.setTimeZone("US/Arizona");
+d.setTimezone("US/Arizona");
 console.log(d+'');
 console.log("AZ Hours: " + d.getHours());
 assert.equal(d.getHours(), 17);
+assert.equal(d.getUTCHours(), 0);
+d.setUTCHours(23);
+assert.equal(d.getHours(), 16);
