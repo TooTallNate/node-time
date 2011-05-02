@@ -1,9 +1,16 @@
 var bindings = require('./time');
 var MONTHS_PER_YEAR    = 12;
 var HOURS_PER_DAY      = 24;
+var DAYS_PER_MONTH     = 31;
 var SECONDS_PER_MINUTE = 60;
 var MINUTES_PER_HOUR   = 60;
+var DAYS_PER_YEAR      = 365;
 var MILLIS_PER_SECOND  = 1000;
+var MILLIS_PER_MINUTE  = MILLIS_PER_SECOND * SECONDS_PER_MINUTE;
+var MILLIS_PER_HOUR    = MILLIS_PER_MINUTE * MINUTES_PER_HOUR;
+var MILLIS_PER_DAY     = MILLIS_PER_HOUR   * HOURS_PER_DAY;
+var MILLIS_PER_MONTH   = MILLIS_PER_DAY    * DAYS_PER_MONTH;
+var MILLIS_PER_YEAR    = MILLIS_PER_DAY    * DAYS_PER_YEAR;
 
 exports.DAYS_OF_WEEK = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 exports.MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -92,31 +99,38 @@ function setTimezone(timezone) {
   }
   // Sets the day of the month (from 1-31) in the current timezone
   this.setDate = function setDate(v) {
-    
+    var diff = v - this.getDate();
+    return this.setTime(this.getTime() + (diff * MILLIS_PER_DAY));
   }
   // Sets the year (four digits) in the current timezone
   this.setFullYear = function setFullYear(v) {
-
+    var diff = v - this.getFullYear();
+    return this.setTime(this.getTime() + (diff * MILLIS_PER_YEAR));
   }
   // Sets the hour (from 0-23) in the current timezone
   this.setHours = function setHours(v) {
-
+    var diff = v - this.getHours();
+    return this.setTime(this.getTime() + (diff * MILLIS_PER_HOUR));
   }
   // Sets the milliseconds (from 0-999) in the current timezone
   this.setMilliseconds = function setMilliseconds(v) {
-
+    var diff = v - this.getMilliseconds();
+    return this.setTime(this.getTime() + diff);
   }
   // Set the minutes (from 0-59) in the current timezone
   this.setMinutes = function setMinutes(v) {
-
+    var diff = v - this.getMinutes();
+    return this.setTime(this.getTime() + (diff * MILLIS_PER_MINUTE));
   }
   // Sets the month (from 0-11) in the current timezone
   this.setMonth = function setMonth(v) {
-
+    var diff = v - this.getMonth();
+    return this.setTime(this.getTime() + (diff * MILLIS_PER_MONTH));
   }
   // Sets the seconds (from 0-59) in the current timezone
   this.setSeconds = function setSeconds(v) {
-
+    var diff = v - this.getSeconds();
+    return this.setTime(this.getTime() + (diff * MILLIS_PER_SECOND));
   }
   // Sets a date and time by adding or subtracting a specified number of
   // milliseconds to/from midnight January 1, 1970.
