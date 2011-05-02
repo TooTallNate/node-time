@@ -85,6 +85,57 @@ function setTimezone(timezone) {
   this.getTimezoneAbbr = function getTimezoneAbbr() {
     return tz.tzname[zoneInfo.isDaylightSavings ? 1 : 0];
   }
+  // Sets a date and time by adding or subtracting a specified number of
+  // milliseconds to/from midnight January 1, 1970.
+  this.setTime = function setTime(v) {
+    var rtn = Date.prototype.setTime.call(this, v);
+    // Since this function changes the internal UTC epoch date value, we need to
+    // re-setup these timezone translation functions to reflect the new value
+    this.setTimezone(this.getTimezone());
+    return rtn;
+  }
+  // Sets the day of the month, according to universal time (from 1-31)
+  this.setUTCDate = function setUTCDate(v) {
+    var rtn = Date.prototype.setUTCDate.call(this, v);
+    this.setTime(v);
+    return rtn;
+  }
+  // Sets the year, according to universal time (four digits)
+  this.setUTCFullYear = function setUTCFullYear(v) {
+    var rtn = Date.prototype.setUTCFullYear.call(this, v);
+    this.setTime(v);
+    return rtn;
+  }
+  // Sets the hour, according to universal time (from 0-23)
+  this.setUTCHours = function setUTCHours(v) {
+    var rtn = Date.prototype.setUTCHours.call(this, v);
+    this.setTime(v);
+    return rtn;
+  }
+  // Sets the milliseconds, according to universal time (from 0-999)
+  this.setUTCMilliseconds = function setUTCMillseconds(v) {
+    var rtn = Date.prototype.setUTCMilliseconds.call(this, v);
+    this.setTime(v);
+    return rtn;
+  }
+  // Set the minutes, according to universal time (from 0-59)
+  this.setUTCMinutes = function setUTCMinutes(v) {
+    var rtn = Date.prototype.setUTCMinutes.call(this, v);
+    this.setTime(v);
+    return rtn;
+  }
+  // Sets the month, according to universal time (from 0-11)
+  this.setUTCMonth = function setUTCMonth(v) {
+    var rtn = Date.prototype.setUTCMonth.call(this, v);
+    this.setTime(v);
+    return rtn;
+  }
+  // Set the seconds, according to universal time (from 0-59)
+  this.setUTCSeconds = function setUTCSeconds(v) {
+    var rtn = Date.prototype.setUTCSeconds.call(this, v);
+    this.setTime(v);
+    return rtn;
+  }
 
   this.toDateString = function toDateString() {
     return exports.DAYS_OF_WEEK[this.getDay()].substring(0, 3) + ' ' + exports.MONTHS[this.getMonth()].substring(0, 3) + ' ' + pad(this.getDate(), 2) + ' ' + this.getFullYear();
