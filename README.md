@@ -11,18 +11,20 @@ and `setTimezone()` functions, which aren't normally part of JavaScript.
 Example
 -------
 
-    var time = require('time');
+``` javascript
+var time = require('time');
 
-    // Create a new Date instance
-    var now = new time.Date();
+// Create a new Date instance
+var now = new time.Date();
 
-    now.setTimezone("America/Los_Angeles");
-    // `.getDate()`, `.getDay()`, `.getHours()`, etc.
-    // will return values according to UTC-8
+now.setTimezone("America/Los_Angeles");
+// `.getDate()`, `.getDay()`, `.getHours()`, etc.
+// will return values according to UTC-8
 
-    now.setTimezone("America/New_York");
-    // `.getDate()`, `.getDay()`, `.getHours()`, etc.
-    // will return values according to UTC-5
+now.setTimezone("America/New_York");
+// `.getDate()`, `.getDay()`, `.getHours()`, etc.
+// will return values according to UTC-5
+```
 
 
 API
@@ -34,7 +36,9 @@ API
 A special `Date` constructor that returns a "super" Date instance, that has
 magic _timezone_ capabilities!
 
-    var date = new time.Date();
+``` javascript
+var date = new time.Date();
+```
 
 
 #### date.setTimezone(timezone) -> Undefined
@@ -43,25 +47,32 @@ Sets the timezone for the `Date` instance. Calls to `getHours()`, `getDays()`,
 `getMinutes()`, etc. will be relative to the timezone specified. This will throw
 an Error if information for the desired timezone could not be found.
 
-    date.setTimezone("America/Argentina/San_Juan");
+``` javascript
+date.setTimezone("America/Argentina/San_Juan");
+```
 
 
 #### date.getTimezone() -> String
 
 Returns a String containing the currently configured timezone for the date instance.
 
-    date.getTimezone();
-     // "America/Argentina/San_Juan"
+``` javascript
+date.getTimezone();
+  // "America/Argentina/San_Juan"
+```
+
 
 ### time() -> Number
 
 Binding for `time()`. Returns the number of seconds since Jan 1, 1900 UTC.
 These two are equivalent:
 
-    time.time();
-     // 1299827226
-    Math.floor(Date.now() / 1000);
-     // 1299827226
+``` javascript
+time.time();
+  // 1299827226
+Math.floor(Date.now() / 1000);
+  // 1299827226
+```
 
 
 ### tzset(timezone) -> Object
@@ -72,31 +83,35 @@ value if none is specified. Returns an Object containing information about the
 newly set timezone, or throws an Error if no timezone information could be loaded
 for the specified timezone.
 
-    time.tzset('US/Pacific');
-     // { tzname: [ 'PST', 'PDT' ],
-     //   timezone: 28800,
-     //   daylight: 1 }
+``` javascript
+time.tzset('US/Pacific');
+  // { tzname: [ 'PST', 'PDT' ],
+  //   timezone: 28800,
+  //   daylight: 1 }
+```
 
 
-### localtime(Number) -> Object
+## localtime(Number) -> Object
 
 Binding for `localtime()`. Accepts a Number with the number of seconds since the
 Epoch (i.e. the result of `time()`), and returns a "broken-down" Object
 representation of the timestamp, according the the currently configured timezone
 (see `tzset()`).
 
-    time.localtime(Date.now()/1000);
-     // { seconds: 38,
-     //   minutes: 7,
-     //   hours: 23,
-     //   dayOfMonth: 10,
-     //   month: 2,
-     //   year: 111,
-     //   dayOfWeek: 4,
-     //   dayOfYear: 68,
-     //   isDaylightSavings: false,
-     //   gmtOffset: -28800,
-     //   timezone: 'PST' }
+``` javascript
+time.localtime(Date.now()/1000);
+  // { seconds: 38,
+  //   minutes: 7,
+  //   hours: 23,
+  //   dayOfMonth: 10,
+  //   month: 2,
+  //   year: 111,
+  //   dayOfWeek: 4,
+  //   dayOfYear: 68,
+  //   isDaylightSavings: false,
+  //   gmtOffset: -28800,
+  //   timezone: 'PST' }
+```
 
 
 [Node]: http://nodejs.org
