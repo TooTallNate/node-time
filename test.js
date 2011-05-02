@@ -1,10 +1,10 @@
 var assert = require('assert');
 
 // The 'index.js' file extends "Date.prototype"
-require('./');
+var time = require('./');
 
 
-var d = new Date(Date.UTC(2011, 0, 1));
+var d = new time.Date(Date.UTC(2011, 0, 1));
 
 assert.equal(d.getUTCFullYear(), 2011);
 assert.equal(d.getUTCMonth(), 0);
