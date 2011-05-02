@@ -11,9 +11,9 @@ var MILLIS_PER_HOUR    = MILLIS_PER_MINUTE * MINUTES_PER_HOUR;
 var MILLIS_PER_DAY     = MILLIS_PER_HOUR   * HOURS_PER_DAY;
 var MILLIS_PER_MONTH   = MILLIS_PER_DAY    * DAYS_PER_MONTH;
 var MILLIS_PER_YEAR    = MILLIS_PER_DAY    * DAYS_PER_YEAR;
+var DAYS_OF_WEEK = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-exports.DAYS_OF_WEEK = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-exports.MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 exports.time = bindings.time;
 exports.localtime = bindings.localtime;
 
@@ -185,7 +185,7 @@ function setTimezone(timezone) {
   }
 
   this.toDateString = function toDateString() {
-    return exports.DAYS_OF_WEEK[this.getDay()].substring(0, 3) + ' ' + exports.MONTHS[this.getMonth()].substring(0, 3) + ' ' + pad(this.getDate(), 2) + ' ' + this.getFullYear();
+    return DAYS_OF_WEEK[this.getDay()].substring(0, 3) + ' ' + MONTHS[this.getMonth()].substring(0, 3) + ' ' + pad(this.getDate(), 2) + ' ' + this.getFullYear();
   }
 
   this.toTimeString = function toTimeString() {
@@ -199,7 +199,7 @@ function setTimezone(timezone) {
   }
 
   this.toLocaleDateString = function toLocaleDateString() {
-    return exports.DAYS_OF_WEEK[this.getDay()] + ', ' + exports.MONTHS[this.getMonth()] + ' ' + pad(this.getDate(), 2) + ', ' + this.getFullYear();
+    return DAYS_OF_WEEK[this.getDay()] + ', ' + MONTHS[this.getMonth()] + ' ' + pad(this.getDate(), 2) + ', ' + this.getFullYear();
   }
 
   this.toLocaleTimeString = function toLocaleTimeString() {
