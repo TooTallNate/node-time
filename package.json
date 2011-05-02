@@ -1,7 +1,7 @@
 {
   "name": "time",
   "description": "\"time.h\" bindings for NodeJS",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/TooTallNate/node-time.git"
@@ -18,5 +18,7 @@
   "directories": {},
   "files": [
     ""
-  ]
+  ],
+  "dependencies": {},
+  "devDependencies": {}
 }
