@@ -44,3 +44,5 @@ assert.equal(d.getHours(), 17);
 assert.equal(d.getUTCHours(), 0);
 d.setUTCHours(23);
 assert.equal(d.getHours(), 16);
+d.setHours(15);
+assert.equal(d.getHours(), 15);
