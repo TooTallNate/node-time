@@ -109,7 +109,10 @@ class Time
   static Handle<Value> Mktime(const Arguments& args)
   {
     HandleScope scope;
-    // TODO: Return or throw an Error if no arguments were passed...
+    if (args.Length() < 1) {
+      return Undefined();
+    }
+
     Local<Object> arg = args[0]->ToObject();
 
     struct tm tmstr;
