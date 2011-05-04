@@ -1,6 +1,6 @@
 var assert = require('assert');
 
-var initialTz = process.env.TZ;
+var initialTz = process.env.TZ = "UTC";
 
 var time = require('./');
 
