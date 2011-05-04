@@ -62,6 +62,18 @@ date.getTimezone();
 ```
 
 
+#### date.getTimezoneAbbr() -> String
+
+Returns the abbreviated timezone name, also taking daylight savings into consideration.
+Useful for the presentation layer of a Date instance. This is a _NON-STANDARD_ extension
+to the Date object, and _must_ be called _after_ `setTimezone()`.
+
+``` javascript
+date.getTimezoneAbbr();
+  // "ART"
+```
+
+
 ### time() -> Number
 
 Binding for `time()`. Returns the number of seconds since Jan 1, 1900 UTC.
