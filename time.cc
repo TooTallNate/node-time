@@ -24,6 +24,9 @@ class Time
 
     // localtime
     NODE_SET_METHOD(target, "localtime", Localtime);
+
+    // mktime
+    NODE_SET_METHOD(target, "mktime", Mktime);
   }
 
   static Handle<Value> Time_(const Arguments& args)
@@ -101,6 +104,25 @@ class Time
     #endif // HAVE_TM_GMTOFF
 
     return scope.Close(obj);
+  }
+
+  static Handle<Value> Mktime(const Arguments& args)
+  {
+    HandleScope scope;
+    // TODO: Return or throw an Error if no arguments were passed...
+    Local<Object> arg = args[0]->ToObject();
+
+    struct tm tmstr;
+    tmstr.tm_sec   = arg->Get(String::NewSymbol("seconds"))->Int32Value();
+    tmstr.tm_min   = arg->Get(String::NewSymbol("minutes"))->Int32Value();
+    tmstr.tm_hour  = arg->Get(String::NewSymbol("hours"))->Int32Value();
+    tmstr.tm_mday  = arg->Get(String::NewSymbol("dayOfMonth"))->Int32Value();
+    tmstr.tm_mon   = arg->Get(String::NewSymbol("month"))->Int32Value();
+    tmstr.tm_year  = arg->Get(String::NewSymbol("year"))->Int32Value();
+    tmstr.tm_isdst = arg->Get(String::NewSymbol("isDaylightSavings"))->BooleanValue() ? 1 : 0;
+    // tm_wday and tm_yday are ignored for input, but properly set after 'mktime' is called
+
+    return scope.Close(Integer::New(mktime( &tmstr )));
   }
 };
 

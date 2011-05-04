@@ -16,6 +16,7 @@ var MONTHS = ['January','February','March','April','May','June','July','August',
 
 exports.time = bindings.time;
 exports.localtime = bindings.localtime;
+exports.mktime = bindings.mktime;
 
 // The user-facing 'tzset' function accepts a timezone String
 // to set to, and returns an object with the zoneinfo for the
