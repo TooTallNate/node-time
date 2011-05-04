@@ -10,10 +10,9 @@ using namespace node;
 using namespace v8;
 
 
-class Time
-{
-  public : static void Init(Handle<Object> target)
-  {
+class Time {
+  public:
+  static void Init(Handle<Object> target) {
     HandleScope scope;
 
     // time(3)
@@ -29,13 +28,11 @@ class Time
     NODE_SET_METHOD(target, "mktime", Mktime);
   }
 
-  static Handle<Value> Time_(const Arguments& args)
-  {
+  static Handle<Value> Time_(const Arguments& args) {
     return Integer::New(time(NULL));
   }
 
-  static Handle<Value> Tzset(const Arguments& args)
-  {
+  static Handle<Value> Tzset(const Arguments& args) {
     HandleScope scope;
 
     // Set up the timezone info from the current TZ environ variable
@@ -62,8 +59,7 @@ class Time
     return scope.Close(obj);
   }
 
-  static Handle<Value> Localtime(const Arguments& args)
-  {
+  static Handle<Value> Localtime(const Arguments& args) {
     HandleScope scope;
 
     // Construct the 'tm' struct
@@ -82,32 +78,31 @@ class Time
     obj->Set(String::NewSymbol("dayOfYear"), Integer::New(timeinfo->tm_yday) );
     obj->Set(String::NewSymbol("isDaylightSavings"), Boolean::New(timeinfo->tm_isdst > 0) );
 
-    #if defined HAVE_TM_GMTOFF
+#if defined HAVE_TM_GMTOFF
     // Only available with glibc's "tm" struct. Most Linuxes, Mac OS X...
     obj->Set(String::NewSymbol("gmtOffset"), Integer::New(timeinfo->tm_gmtoff) );
     obj->Set(String::NewSymbol("timezone"), String::NewSymbol(timeinfo->tm_zone) );
 
-    #elif defined HAVE_TIMEZONE
+#elif defined HAVE_TIMEZONE
     // Compatibility for Cygwin, Solaris, probably others...
     long scd;
     if (timeinfo->tm_isdst > 0) {
-      #ifdef HAVE_ALTZONE
+  #ifdef HAVE_ALTZONE
       scd = -altzone;
-      #else
+  #else
       scd = -timezone + 3600;
-      #endif // HAVE_ALTZONE
+  #endif // HAVE_ALTZONE
     } else {
       scd = -timezone;
     }
     obj->Set(String::NewSymbol("gmtOffset"), Integer::New(scd));
     obj->Set(String::NewSymbol("timezone"), String::NewSymbol(tzname[timeinfo->tm_isdst]));
-    #endif // HAVE_TM_GMTOFF
+#endif // HAVE_TM_GMTOFF
 
     return scope.Close(obj);
   }
 
-  static Handle<Value> Mktime(const Arguments& args)
-  {
+  static Handle<Value> Mktime(const Arguments& args) {
     HandleScope scope;
     if (args.Length() < 1) {
       return Undefined();
@@ -127,13 +122,12 @@ class Time
 
     return scope.Close(Integer::New(mktime( &tmstr )));
   }
+
 };
 
 extern "C" {
-  static void init (Handle<Object> target)
-  {
+  static void init (Handle<Object> target) {
     Time::Init(target);
   }
-
   NODE_MODULE(time, init);
 }
