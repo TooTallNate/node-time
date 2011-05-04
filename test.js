@@ -1,5 +1,7 @@
 var assert = require('assert');
 
+var initialTz = process.env.TZ;
+
 var time = require('./');
 
 var d = new time.Date(Date.UTC(2011, 0, 1));
@@ -46,3 +48,7 @@ d.setUTCHours(23);
 assert.equal(d.getHours(), 16);
 d.setHours(15);
 assert.equal(d.getHours(), 15);
+
+// The 'Date' extension functions are meant to "clean up" after themselves
+// by setting the TZ variable back to it's original value after doing it's thing.
+assert.equal(process.env.TZ, initialTz);
