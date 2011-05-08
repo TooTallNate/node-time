@@ -208,6 +208,7 @@ function setTimezone(timezone) {
   function mktime() {
     var oldTz = process.env.TZ;
     exports.tzset(this.getTimezone());
+    zoneInfo.isDaylightSavings = -1; // Auto-detect the timezone
     var t = exports.mktime(zoneInfo);
     if (oldTz) {
       exports.tzset(oldTz);

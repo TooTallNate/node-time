@@ -117,7 +117,7 @@ class Time {
     tmstr.tm_mday  = arg->Get(String::NewSymbol("dayOfMonth"))->Int32Value();
     tmstr.tm_mon   = arg->Get(String::NewSymbol("month"))->Int32Value();
     tmstr.tm_year  = arg->Get(String::NewSymbol("year"))->Int32Value();
-    tmstr.tm_isdst = arg->Get(String::NewSymbol("isDaylightSavings"))->BooleanValue() ? 1 : 0;
+    tmstr.tm_isdst = arg->Get(String::NewSymbol("isDaylightSavings"))->Int32Value();
     // tm_wday and tm_yday are ignored for input, but properly set after 'mktime' is called
 
     return scope.Close(Integer::New(mktime( &tmstr )));
