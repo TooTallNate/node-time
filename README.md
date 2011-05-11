@@ -103,7 +103,7 @@ time.tzset('US/Pacific');
 ```
 
 
-## localtime(Number) -> Object
+### localtime(Number) -> Object
 
 Binding for `localtime()`. Accepts a Number with the number of seconds since the
 Epoch (i.e. the result of `time()`), and returns a "broken-down" Object
