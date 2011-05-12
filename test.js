@@ -52,3 +52,11 @@ assert.equal(d.getHours(), 15);
 // The 'Date' extension functions are meant to "clean up" after themselves
 // by setting the TZ variable back to it's original value after doing it's thing.
 assert.equal(process.env.TZ, initialTz);
+
+
+// We can call the 'extend()' function to transform a regular Date instance
+// into a node-time extended Date instance...
+var regularDate = new Date();
+assert.equal('setTimezone' in regularDate, false);
+time.extend(regularDate);
+assert.equal('setTimezone' in regularDate, true);

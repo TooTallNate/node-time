@@ -246,6 +246,12 @@ _Date.prototype.getTimezoneAbbr = getTimezoneAbbr;
 // 'new' operator, or extend an already existing Date instance with 'extend()'
 exports.Date = _Date;
 
+// Turns a "regular" Date instance into one of our "extended" Date instances.
+// The return value is negligible, as the original Date instance is modified.
+exports.extend = function extend(date) {
+  return date.__proto__ = _Date.prototype;
+}
+
 
 // Pads a number with 0s if required
 function pad(num, padLen) {
