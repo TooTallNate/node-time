@@ -1,5 +1,10 @@
 var bindings = require('./time');
 
+// A "hack" of sorts to Force getting our own Date instance.
+// Otherwise, in some cases, the global Natives are shared between
+// contexts (not what we want)...
+var _Date = process.env.NODE_MODULE_CONTEXTS ? Date : require('vm').runInNewContext("Date");
+
 var MILLIS_PER_SECOND = 1000;
 var DAYS_OF_WEEK = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -126,7 +131,7 @@ function setTimezone(timezone) {
   // Sets a date and time by adding or subtracting a specified number of
   // milliseconds to/from midnight January 1, 1970.
   this.setTime = function setTime(v) {
-    var rtn = Date.prototype.setTime.call(this, v);
+    var rtn = _Date.prototype.setTime.call(this, v);
     // Since this function changes the internal UTC epoch date value, we need to
     // re-setup these timezone translation functions to reflect the new value
     reset.call(this);
@@ -134,43 +139,43 @@ function setTimezone(timezone) {
   }
   // Sets the day of the month, according to universal time (from 1-31)
   this.setUTCDate = function setUTCDate(v) {
-    var rtn = Date.prototype.setUTCDate.call(this, v);
+    var rtn = _Date.prototype.setUTCDate.call(this, v);
     reset.call(this);
     return rtn;
   }
   // Sets the year, according to universal time (four digits)
   this.setUTCFullYear = function setUTCFullYear(v) {
-    var rtn = Date.prototype.setUTCFullYear.call(this, v);
+    var rtn = _Date.prototype.setUTCFullYear.call(this, v);
     reset.call(this);
     return rtn;
   }
   // Sets the hour, according to universal time (from 0-23)
   this.setUTCHours = function setUTCHours(v) {
-    var rtn = Date.prototype.setUTCHours.call(this, v);
+    var rtn = _Date.prototype.setUTCHours.call(this, v);
     reset.call(this);
     return rtn;
   }
   // Sets the milliseconds, according to universal time (from 0-999)
   this.setUTCMilliseconds = function setUTCMillseconds(v) {
-    var rtn = Date.prototype.setUTCMilliseconds.call(this, v);
+    var rtn = _Date.prototype.setUTCMilliseconds.call(this, v);
     reset.call(this);
     return rtn;
   }
   // Set the minutes, according to universal time (from 0-59)
   this.setUTCMinutes = function setUTCMinutes(v) {
-    var rtn = Date.prototype.setUTCMinutes.call(this, v);
+    var rtn = _Date.prototype.setUTCMinutes.call(this, v);
     reset.call(this);
     return rtn;
   }
   // Sets the month, according to universal time (from 0-11)
   this.setUTCMonth = function setUTCMonth(v) {
-    var rtn = Date.prototype.setUTCMonth.call(this, v);
+    var rtn = _Date.prototype.setUTCMonth.call(this, v);
     reset.call(this);
     return rtn;
   }
   // Set the seconds, according to universal time (from 0-59)
   this.setUTCSeconds = function setUTCSeconds(v) {
-    var rtn = Date.prototype.setUTCSeconds.call(this, v);
+    var rtn = _Date.prototype.setUTCSeconds.call(this, v);
     reset.call(this);
     return rtn;
   }
@@ -218,7 +223,7 @@ function setTimezone(timezone) {
   }
 
 }
-Date.prototype.setTimezone = Date.prototype.setTimeZone = setTimezone;
+_Date.prototype.setTimezone = _Date.prototype.setTimeZone = setTimezone;
 
 
 // Returns a "String" of the last value set in "setTimezone".
@@ -227,18 +232,19 @@ Date.prototype.setTimezone = Date.prototype.setTimeZone = setTimezone;
 function getTimezone() {
   return this._timezone;
 }
-Date.prototype.getTimezone = Date.prototype.getTimeZone = getTimezone;
+_Date.prototype.getTimezone = _Date.prototype.getTimeZone = getTimezone;
 
 // NON-STANDARD: I don't think we can implement this before 'setTimezone()'
 //               called, so until it is, throw an Error on the Date instance.
 function getTimezoneAbbr() {
   throw new Error('You must call "setTimezone(tz)" before "getTimezoneAbbr()" may be called');
 }
-Date.prototype.getTimezoneAbbr = getTimezoneAbbr;
+_Date.prototype.getTimezoneAbbr = getTimezoneAbbr;
 
 
-// Export the modified 'Date' instance in case NODE_MODULE_CONTEXTS is set.
-exports.Date = Date;
+// Export the modified 'Date' instance. Users should either use this with the
+// 'new' operator, or extend an already existing Date instance with 'extend()'
+exports.Date = _Date;
 
 
 // Pads a number with 0s if required
