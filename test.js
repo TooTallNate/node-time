@@ -60,3 +60,10 @@ var regularDate = new Date();
 assert.equal('setTimezone' in regularDate, false);
 time.extend(regularDate);
 assert.equal('setTimezone' in regularDate, true);
+
+
+// 'node-time' goes out of it's way to ensure that we don't modify the global
+// Date instance. 'Date' is shared globally between modules by default (when
+// NODE_MODULE_CONTEXTS is NOT set), so we need to make sure that we don't modify
+// it, and instead export our own Date constructor...
+assert.ok(time.Date !== Date);
