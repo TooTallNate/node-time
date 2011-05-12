@@ -74,6 +74,18 @@ date.getTimezoneAbbr();
 ```
 
 
+### extend(date) -> Date
+
+Transforms a "regular" Date instance into one of `node-time`'s "extended" Date instances.
+
+``` javascript
+var d = new Date();
+// `d.setTimezone()` does not exist...
+time.extend(d);
+d.setTimezone("UTC");
+```
+
+
 ### time() -> Number
 
 Binding for `time()`. Returns the number of seconds since Jan 1, 1900 UTC.
