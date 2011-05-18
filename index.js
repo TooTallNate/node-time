@@ -249,7 +249,12 @@ exports.Date = _Date;
 // Turns a "regular" Date instance into one of our "extended" Date instances.
 // The return value is negligible, as the original Date instance is modified.
 exports.extend = function extend(date) {
-  return date.__proto__ = _Date.prototype;
+  date.getTimezone = getTimezone;
+  date.setTimezone = setTimezone;
+  date.getTimeZone = getTimezone; // Remove...
+  date.setTimeZone = setTimezone; // Remove...
+  date.getTimezoneAbbr = getTimezoneAbbr;
+  return date;
 }
 
 

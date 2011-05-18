@@ -58,8 +58,9 @@ assert.equal(process.env.TZ, initialTz);
 // into a node-time extended Date instance...
 var regularDate = new Date();
 assert.equal('setTimezone' in regularDate, false);
-time.extend(regularDate);
+var rtn = time.extend(regularDate);
 assert.equal('setTimezone' in regularDate, true);
+assert.ok(rtn === regularDate); // Should return the same instance
 
 
 // 'node-time' goes out of it's way to ensure that we don't modify the global
