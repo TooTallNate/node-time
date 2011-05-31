@@ -55,6 +55,7 @@ date.setTimezone("America/Argentina/San_Juan");
 #### date.getTimezone() -> String
 
 Returns a String containing the currently configured timezone for the date instance.
+This must be called _after_ `setTimezone()` has been called.
 
 ``` javascript
 date.getTimezone();
