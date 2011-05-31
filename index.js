@@ -235,10 +235,12 @@ function getTimezone() {
 }
 _Date.prototype.getTimezone = _Date.prototype.getTimeZone = getTimezone;
 
-// NON-STANDARD: I don't think we can implement this before 'setTimezone()'
-//               called, so until it is, throw an Error on the Date instance.
+// NON-STANDARD: Returns the abbreviated timezone name, also taking daylight
+// savings into consideration. Useful for the presentation layer of a Date
+// instance.
 function getTimezoneAbbr() {
-  throw new Error('You must call "setTimezone(tz)" before "getTimezoneAbbr()" may be called');
+  var str = this.toString().match(/\([A-Z]+\)/)[0];
+  return str.substring(1, str.length-1);
 }
 _Date.prototype.getTimezoneAbbr = getTimezoneAbbr;
 

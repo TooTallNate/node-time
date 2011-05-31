@@ -66,7 +66,7 @@ date.getTimezone();
 
 Returns the abbreviated timezone name, also taking daylight savings into consideration.
 Useful for the presentation layer of a Date instance. This is a _NON-STANDARD_ extension
-to the Date object, and _must_ be called _after_ `setTimezone()`.
+to the Date object.
 
 ``` javascript
 date.getTimezoneAbbr();
