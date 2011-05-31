@@ -41,7 +41,6 @@ function setTimezone(timezone) {
   var oldTz = process.env.TZ;
   var tz = exports.tzset(timezone);
   var zoneInfo = exports.localtime(this / 1000);
-  this._timezone = timezone;
   if (oldTz) {
     tzset(oldTz);
     oldTz = null;
@@ -50,6 +49,9 @@ function setTimezone(timezone) {
   // If we got to here without throwing an Error, then
   // a valid timezone was requested, and we should have
   // a valid zoneInfo Object.
+  this.getTimezone = function getTimezone() {
+    return timezone;
+  }
 
   // Returns the day of the month (1-31) for the specified date according to local time.
   this.getDate = function getDate() {
@@ -227,10 +229,9 @@ _Date.prototype.setTimezone = _Date.prototype.setTimeZone = setTimezone;
 
 
 // Returns a "String" of the last value set in "setTimezone".
-// TODO: Make this better. i.e. return something when 'setTimezone'
-//       hasn't been called yet.
+// TODO: Return something when 'setTimezone' hasn't been called yet.
 function getTimezone() {
-  return this._timezone;
+  throw new Error('You must call "setTimezone(tz)" before "getTimezone()" may be called');
 }
 _Date.prototype.getTimezone = _Date.prototype.getTimeZone = getTimezone;
 
