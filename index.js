@@ -75,7 +75,7 @@ function setTimezone(timezone) {
   var tz = exports.tzset(timezone);
   var zoneInfo = exports.localtime(this / 1000);
   if (oldTz != timezone) {
-    tzset(oldTz);
+    exports.tzset(oldTz);
     oldTz = null;
   }
 
