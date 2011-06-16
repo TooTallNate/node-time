@@ -38,9 +38,9 @@ API
 
 ### Date() -> Date
 #### new time.Date()
-#### new time.Date(millisecondsFromUTC);
-#### new time.Date(dateString [, timezone]);
-#### new time.Date(year, month, day [, hour, minute, second, millisecond ] [, timezone]);
+#### new time.Date(millisecondsFromUTC)
+#### new time.Date(dateString [, timezone])
+#### new time.Date(year, month, day [, hour, minute, second, millisecond ] [, timezone])
 
 A special `Date` constructor that returns a "super" Date instance, that has
 magic _timezone_ capabilities!
