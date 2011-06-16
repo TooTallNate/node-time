@@ -91,14 +91,15 @@ date.getTimezoneAbbr();
 
 Same as the native JavaScript `Date.parse()` function, only this version allows
 for a second, optional, `timezone` argument, which specifies the timezone in
-which the date string parsing will be resolved against.
+which the date string parsing will be resolved against. This function is also
+aliased as `time.parse()`.
 
 ``` javascript
-Date.parse("1970, January 1");  // <- Local Time
+time.Date.parse("1970, January 1");  // <- Local Time
   // 28800000
-Date.parse("1970, January 1", "Europe/Copenhagen");
+time.Date.parse("1970, January 1", "Europe/Copenhagen");
   // -3600000
-Date.parse("1970, January 1", "UTC");
+time.Date.parse("1970, January 1", "UTC");
   // 0
 ```
 
