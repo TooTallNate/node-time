@@ -39,8 +39,8 @@ API
 ### Date() -> Date
 #### new time.Date()
 #### new time.Date(millisecondsFromUTC)
-#### new time.Date(dateString [, timezone])
-#### new time.Date(year, month, day [, hour, minute, second, millisecond ] [, timezone])
+#### new time.Date(dateString [, timezone ])
+#### new time.Date(year, month, day [, hour, minute, second, millisecond ] [, timezone ])
 
 A special `Date` constructor that returns a "super" Date instance, that has
 magic _timezone_ capabilities! You can also pass a `timezone` as the last
@@ -84,6 +84,22 @@ to the Date object.
 ``` javascript
 date.getTimezoneAbbr();
   // "ART"
+```
+
+
+### Date.parse(dateStr [, timezone ]) -> Number
+
+Same as the native JavaScript `Date.parse()` function, only this version allows
+for a second, optional, `timezone` argument, which specifies the timezone in
+which the date string parsing will be resolved against.
+
+``` javascript
+Date.parse("1970, January 1");  // <- Local Time
+  // 28800000
+Date.parse("1970, January 1", "Europe/Copenhagen");
+  // -3600000
+Date.parse("1970, January 1", "UTC");
+  // 0
 ```
 
 
