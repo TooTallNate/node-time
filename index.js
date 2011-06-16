@@ -5,6 +5,23 @@ var bindings = require('./time');
 // contexts (not what we want)...
 var _Date = process.env.NODE_MODULE_CONTEXTS ? Date : require('vm').runInNewContext("Date");
 
+// During startup, we synchronously attempt to determine the location of the
+// timezone dir, or TZDIR on some systems. This isn't necessary for the
+// C bindings, however it's needed for the `listTimezones()` function and for
+// resolving the 'initial' timezone to use.
+var possibleTzdirs = [
+    '/usr/share/zoneinfo'
+  , '/usr/lib/zoneinfo'
+];
+var TZDIR = process.env.TZDIR;
+while (!TZDIR) {
+  try {
+    var d = possibleTzdirs.shift();
+    if (require('fs').statSync(d).isDirectory())
+      TZDIR = d;
+  } catch(e) { console.error(e); }
+}
+
 var MILLIS_PER_SECOND = 1000;
 var DAYS_OF_WEEK = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
