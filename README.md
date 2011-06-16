@@ -43,7 +43,8 @@ API
 #### new time.Date(year, month, day [, hour, minute, second, millisecond ] [, timezone])
 
 A special `Date` constructor that returns a "super" Date instance, that has
-magic _timezone_ capabilities!
+magic _timezone_ capabilities! You can also pass a `timezone` as the last
+argument in order to have a Date instance in the specified timezone.
 
 ``` javascript
 var now = new time.Date();
