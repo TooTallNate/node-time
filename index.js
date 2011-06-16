@@ -279,8 +279,66 @@ _Date.prototype.getTimezoneAbbr = getTimezoneAbbr;
 
 
 // Export the modified 'Date' instance. Users should either use this with the
-// 'new' operator, or extend an already existing Date instance with 'extend()'
-exports.Date = _Date;
+// 'new' operator, or extend an already existing Date instance with 'extend()'.
+// An optional, NON-STANDARD, "timezone" argument may be appended as the final
+// argument, in order to specify the initial timezone the Date instance should
+// be created with.
+function Date (year, month, day, hour, minute, second, millisecond, timezone) {
+  if (!(this instanceof Date)) {
+    return new Date(year, month, day, hour, minute, second, millisecond, timezone).toString();
+  }
+  var argc = arguments.length
+    , d;
+  // So that we don't have to do the switch block below twice!
+  while (typeof arguments[argc-1] === 'undefined') {
+    argc--;
+  }
+  // An optional 'timezone' argument may be passed as the final argument
+  if (argc >= 2 && typeof arguments[argc - 1] === 'string') {
+    timezone = arguments[argc - 1];
+    argc--;
+  }
+  // Ugly, but the native Date constructor depends on arguments.length in order
+  // to create a Date instance in the intended fashion.
+  switch (argc) {
+    case 0:
+      d = new _Date(); break;
+    case 1:
+      d = new _Date(year); break;
+    case 2:
+      d = new _Date(year, month); break;
+    case 3:
+      d = new _Date(year, month, day); break;
+    case 4:
+      d = new _Date(year, month, day, hour); break;
+    case 5:
+      d = new _Date(year, month, day, hour, minute); break;
+    case 6:
+      d = new _Date(year, month, day, hour, minute, second); break;
+    case 7:
+      d = new _Date(year, month, day, hour, minute, second, millisecond); break;
+  }
+  if (timezone) {
+    // If a 'timezone' was supplied, then the "trick" is to create another Date
+    // instance with the 'setTimezone()' function called on it. After that, we
+    // can proxy all the 'set*()' calls to the new Date instance. This is
+    // pretty much a "hack", but it allows us to re-use the native Date
+    // constructor logic above...
+    var realD = new _Date(0);
+    realD.setTimezone(timezone);
+    realD.setMilliseconds(d.getMilliseconds());
+    realD.setSeconds(d.getSeconds());
+    realD.setMinutes(d.getMinutes());
+    realD.setHours(d.getHours());
+    realD.setDate(d.getDate());
+    realD.setMonth(d.getMonth());
+    realD.setFullYear(d.getFullYear());
+    d = realD;
+  }
+  return d;
+}
+Date.prototype = _Date.prototype;
+exports.Date = Date;
 
 // Turns a "regular" Date instance into one of our "extended" Date instances.
 // The return value is negligible, as the original Date instance is modified.
