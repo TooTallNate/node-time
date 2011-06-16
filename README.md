@@ -139,5 +139,13 @@ time.localtime(Date.now()/1000);
 ```
 
 
+### currentTimezone -> String
+
+The `currentTimezone` property always contains a String to the current timezone
+being used by `node-time`. This property is reset every time the `tzset()`
+function is called. Individual `time.Date` instances may have independent
+timezone settings than what this one is...
+
+
 [Node]: http://nodejs.org
 [time.h]: http://en.wikipedia.org/wiki/Time.h
