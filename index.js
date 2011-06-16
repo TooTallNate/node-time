@@ -290,7 +290,7 @@ function Date (year, month, day, hour, minute, second, millisecond, timezone) {
   var argc = arguments.length
     , d;
   // So that we don't have to do the switch block below twice!
-  while (typeof arguments[argc-1] === 'undefined') {
+  while (argc > 0 && typeof arguments[argc-1] === 'undefined') {
     argc--;
   }
   // An optional 'timezone' argument may be passed as the final argument
