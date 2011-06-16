@@ -340,6 +340,22 @@ function Date (year, month, day, hour, minute, second, millisecond, timezone) {
 Date.prototype = _Date.prototype;
 exports.Date = Date;
 
+
+// We also overwrite `Date.parse()`. It can accept an optional 'timezone'
+// second argument.
+var nativeParse = _Date.parse;
+function parse (dateStr, timezone) {
+  
+}
+exports.parse = parse;
+
+// 'now()', 'parse()', and 'UTC()' all need to be re-defined on Date as don't enum
+Object.defineProperty(Date, 'now', { value: _Date.now, writable: true, enumerable: false });
+Object.defineProperty(Date, 'parse', { value: parse, writable: true, enumerable: false });
+Object.defineProperty(Date, 'UTC', { value: _Date.UTC, writable: true, enumerable: false });
+
+
+
 // Turns a "regular" Date instance into one of our "extended" Date instances.
 // The return value is negligible, as the original Date instance is modified.
 exports.extend = function extend(date) {
