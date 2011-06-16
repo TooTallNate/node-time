@@ -14,12 +14,23 @@ var possibleTzdirs = [
   , '/usr/lib/zoneinfo'
 ];
 var TZDIR = process.env.TZDIR;
-while (!TZDIR) {
+while (!TZDIR && possibleTzdirs.length > 0) {
   try {
     var d = possibleTzdirs.shift();
     if (require('fs').statSync(d).isDirectory())
       TZDIR = d;
-  } catch(e) { console.error(e); }
+  } catch(e) {}
+}
+if (!TZDIR) throw new Error("FATAL: Couldn't determine the location of your timezone directory!");
+
+// Older versions of node-time would require the user to have the TZ
+// environment variable set, otherwise undesirable results would happen. Now
+// node-time tries to automatically determine the current timezone for you.
+if (!process.env.TZ) {
+  var currentTimezonePath = require('fs').readlinkSync('/etc/localtime');
+  if (currentTimezonePath.substring(0, TZDIR.length) === TZDIR)
+    // Got It!
+    process.env.TZ = currentTimezonePath.substring(TZDIR.length + 1);
 }
 
 var MILLIS_PER_SECOND = 1000;
