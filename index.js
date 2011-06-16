@@ -345,7 +345,7 @@ exports.Date = Date;
 // second argument.
 var nativeParse = _Date.parse;
 function parse (dateStr, timezone) {
-  
+  return new Date(dateStr, timezone).getTime();
 }
 exports.parse = parse;
 
