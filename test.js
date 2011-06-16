@@ -1,8 +1,7 @@
 var assert = require('assert');
 
-var initialTz = process.env.TZ = "UTC";
-
 var time = require('./');
+var initialTz = time.currentTimezone;
 
 var d = new time.Date(Date.UTC(2011, 0, 1));
 

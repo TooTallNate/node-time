@@ -60,9 +60,11 @@ function tzset(tz) {
     }
     throw err;
   }
+  exports.currentTimezone = usedTz;
   return rtn;
 }
 exports.tzset = tzset;
+exports.currentTimezone = process.env.TZ;
 
 // The "setTimezone" function is the "entry point" for a Date instance.
 // It must be called after an instance has been created. After, the 'getSeconds()',
