@@ -71,10 +71,10 @@ exports.currentTimezone = process.env.TZ;
 // 'getHours()', 'getDays()', etc. functions will return values relative
 // to the time zone specified.
 function setTimezone(timezone) {
-  var oldTz = process.env.TZ;
+  var oldTz = exports.currentTimezone;
   var tz = exports.tzset(timezone);
   var zoneInfo = exports.localtime(this / 1000);
-  if (oldTz) {
+  if (oldTz != timezone) {
     tzset(oldTz);
     oldTz = null;
   }
