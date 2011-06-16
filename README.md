@@ -14,7 +14,7 @@ Example
 ``` javascript
 var time = require('time');
 
-// Create a new Date instance
+// Create a new Date instance, representing the current instant in time
 var now = new time.Date();
 
 now.setTimezone("America/Los_Angeles");
@@ -24,6 +24,11 @@ now.setTimezone("America/Los_Angeles");
 now.setTimezone("America/New_York");
 // `.getDate()`, `.getDay()`, `.getHours()`, etc.
 // will return values according to UTC-5
+
+
+// You can also set the timezone during instantiation
+var azDate = new Date(2010, 0, 1, 'America/Phoenix');
+azDate.getTimezone(); // 'America/Phoenix'
 ```
 
 
@@ -32,12 +37,18 @@ API
 
 
 ### Date() -> Date
+#### new time.Date()
+#### new time.Date(millisecondsFromUTC);
+#### new time.Date(dateString [, timezone]);
+#### new time.Date(year, month, day [, hour, minute, second, millisecond ] [, timezone]);
 
 A special `Date` constructor that returns a "super" Date instance, that has
 magic _timezone_ capabilities!
 
 ``` javascript
-var date = new time.Date();
+var now = new time.Date();
+var another = new time.Date('Aug 9, 1995', 'UTC');
+var more = new time.Date(1970, 0, 1, 'Europe/Amsterdam');
 ```
 
 
