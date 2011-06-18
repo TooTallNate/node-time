@@ -1,4 +1,12 @@
-var bindings = require('./time');
+var bindings = require('./time.node')
+  , MILLIS_PER_SECOND = 1000
+  , DAYS_OF_WEEK = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+  , MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+exports.currentTimezone = process.env.TZ;
+exports.time = bindings.time;
+exports.localtime = bindings.localtime;
+exports.mktime = bindings.mktime;
 
 // A "hack" of sorts to Force getting our own Date instance.
 // Otherwise, in some cases, the global Natives are shared between
@@ -21,7 +29,7 @@ while (!TZDIR && possibleTzdirs.length > 0) {
       TZDIR = d;
   } catch(e) {}
 }
-possibleTzdirs = null;
+possibleTzdirs = null; // garbage collect
 if (!TZDIR) throw new Error("FATAL: Couldn't determine the location of your timezone directory!");
 
 // Older versions of node-time would require the user to have the TZ
@@ -32,17 +40,9 @@ if (!process.env.TZ) {
     var currentTimezonePath = require('fs').readlinkSync('/etc/localtime');
     if (currentTimezonePath.substring(0, TZDIR.length) === TZDIR)
       // Got It!
-      process.env.TZ = currentTimezonePath.substring(TZDIR.length + 1);
+      exports.currentTimezone = process.env.TZ = currentTimezonePath.substring(TZDIR.length + 1);
   } catch(e) {}
 }
-
-var MILLIS_PER_SECOND = 1000;
-var DAYS_OF_WEEK = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
-exports.time = bindings.time;
-exports.localtime = bindings.localtime;
-exports.mktime = bindings.mktime;
 
 // The user-facing 'tzset' function accepts a timezone String
 // to set to, and returns an object with the zoneinfo for the
@@ -64,7 +64,6 @@ function tzset(tz) {
   return rtn;
 }
 exports.tzset = tzset;
-exports.currentTimezone = process.env.TZ;
 
 // The "setTimezone" function is the "entry point" for a Date instance.
 // It must be called after an instance has been created. After, the 'getSeconds()',
