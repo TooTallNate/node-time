@@ -53,14 +53,33 @@ var more = new time.Date(1970, 0, 1, 'Europe/Amsterdam');
 ```
 
 
-#### date.setTimezone(timezone) -> Undefined
+#### date.setTimezone(timezone [, relative ]) -> Undefined
 
-Sets the timezone for the `Date` instance. Calls to `getHours()`, `getDays()`,
-`getMinutes()`, etc. will be relative to the timezone specified. This will throw
-an Error if information for the desired timezone could not be found.
+Sets the timezone for the `Date` instance. By default this function makes it so
+that calls to `getHours()`, `getDays()`, `getMinutes()`, etc. will be relative to
+the timezone specified. If you pass `true` in as the second argument, then
+instead of adjusting the local "get" functions to match the specified timezone,
+instead the internal state of the Date instance is changed, such that the local
+"get" functions retain their values from before the setTimezone call.
 
 ``` javascript
-date.setTimezone("America/Argentina/San_Juan");
+date.setTimezone("America/Argentina/San_Juan")
+
+// Default behavior:
+a = new time.Date()
+a.toString()
+// 'Wed Aug 31 2011 09:45:31 GMT-0700 (PDT)'
+a.setTimezone('UTC')
+a.toString()
+// 'Wed Aug 31 2011 16:45:31 GMT+0000 (UTC)'
+
+// Relative behavior:
+b = new time.Date()
+b.toString()
+// 'Wed Aug 31 2011 10:48:03 GMT-0700 (PDT)'
+b.setTimezone('UTC', true)
+b.toString()
+// 'Wed Aug 31 2011 10:48:03 GMT+0000 (UTC)'
 ```
 
 
