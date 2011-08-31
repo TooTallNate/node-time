@@ -67,3 +67,27 @@ assert.ok(rtn === regularDate); // Should return the same instance
 // NODE_MODULE_CONTEXTS is NOT set), so we need to make sure that we don't modify
 // it, and instead export our own Date constructor...
 assert.ok(time.Date !== Date);
+
+
+// If you pass `true` as a second argument to Date#setTimezone(), then instead
+// of changing the local get* functions on the Date instance to match the
+// timezone's representation of the internal UTC time, the local values are
+// instead retained, and the Date's internal UTC time is adjusted to match so:
+var relative = new time.Date()
+  , ms = relative.getMilliseconds()
+  , se = relative.getSeconds()
+  , mi = relative.getMinutes()
+  , ho = relative.getHours()
+  , da = relative.getDate()
+  , mo = relative.getMonth()
+  , ye = relative.getFullYear()
+
+relative.setTimezone('UTC', true)
+
+assert.equal(ms, relative.getMilliseconds())
+assert.equal(se, relative.getSeconds())
+assert.equal(mi, relative.getMinutes())
+assert.equal(ho, relative.getHours())
+assert.equal(da, relative.getDate())
+assert.equal(mo, relative.getMonth())
+assert.equal(ye, relative.getFullYear())
