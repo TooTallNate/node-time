@@ -69,7 +69,21 @@ exports.tzset = tzset;
 // It must be called after an instance has been created. After, the 'getSeconds()',
 // 'getHours()', 'getDays()', etc. functions will return values relative
 // to the time zone specified.
-function setTimezone(timezone) {
+function setTimezone(timezone, relative) {
+
+  // If `true` is passed in as the second argument, then the Date instance
+  // will have it's timezone set, but it's current local values will remain
+  // the same (i.e. the Date's internal time value will be changed)
+  var ms, s, m, h, d, mo, y
+  if (relative) {
+    ms = this.getMilliseconds()
+    s  = this.getSeconds()
+    m  = this.getMinutes()
+    h  = this.getHours()
+    d  = this.getDate()
+    mo = this.getMonth()
+    y  = this.getFullYear()
+  }
   var oldTz = exports.currentTimezone;
   var tz = exports.tzset(timezone);
   var zoneInfo = exports.localtime(this / 1000);
@@ -237,6 +251,17 @@ function setTimezone(timezone) {
   }
 
   this.toLocaleString = this.toString;
+
+  if (relative) {
+    this.setMilliseconds(m)
+    this.setSeconds(s)
+    this.setMinutes(m)
+    this.setHours(h)
+    this.setDate(d)
+    this.setMonth(mo)
+    this.setFullYear(y)
+    ms, s, m, h, d, mo, y = null
+  }
 
 
   // Used internally by the 'set*' functions above...
