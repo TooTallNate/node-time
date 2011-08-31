@@ -159,7 +159,7 @@ function setTimezone(timezone, relative) {
   // Sets the milliseconds (from 0-999) in the current timezone
   this.setMilliseconds = function setMilliseconds(v) {
     var diff = v - this.getMilliseconds();
-    return this.setTime(+this + diff);
+    return this.setTime(this.getTime() + diff);
   }
   // Set the minutes (from 0-59) in the current timezone
   this.setMinutes = function setMinutes(v) {
