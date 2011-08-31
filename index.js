@@ -253,7 +253,7 @@ function setTimezone(timezone, relative) {
   this.toLocaleString = this.toString;
 
   if (relative) {
-    this.setMilliseconds(m)
+    this.setMilliseconds(ms)
     this.setSeconds(s)
     this.setMinutes(m)
     this.setHours(h)
