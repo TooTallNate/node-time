@@ -282,15 +282,14 @@ function setTimezone(timezone, relative) {
   }
 
 }
-_Date.prototype.setTimezone = _Date.prototype.setTimeZone = setTimezone;
-
+_Date.prototype.setTimezone = setTimezone;
 
 // Returns a "String" of the last value set in "setTimezone".
 // TODO: Return something when 'setTimezone' hasn't been called yet.
 function getTimezone() {
   throw new Error('You must call "setTimezone(tz)" before "getTimezone()" may be called');
 }
-_Date.prototype.getTimezone = _Date.prototype.getTimeZone = getTimezone;
+_Date.prototype.getTimezone = getTimezone;
 
 // NON-STANDARD: Returns the abbreviated timezone name, also taking daylight
 // savings into consideration. Useful for the presentation layer of a Date
@@ -301,6 +300,11 @@ function getTimezoneAbbr() {
 }
 _Date.prototype.getTimezoneAbbr = getTimezoneAbbr;
 
+// Deprecation warnings for timeZone functions
+var setTimeZone = deprecated('setTimeZone', setTimezone)
+  , getTimeZone = deprecated('getTimeZone', getTimezone)
+_Date.prototype.getTimeZone = getTimeZone
+_Date.prototype.setTimeZone = setTimeZone
 
 // Export the modified 'Date' instance. Users should either use this with the
 // 'new' operator, or extend an already existing Date instance with 'extend()'.
@@ -385,8 +389,8 @@ Object.defineProperty(Date, 'UTC', { value: _Date.UTC, writable: true, enumerabl
 exports.extend = function extend (date) {
   date.getTimezone = getTimezone;
   date.setTimezone = setTimezone;
-  date.getTimeZone = getTimezone; // Remove...
-  date.setTimeZone = setTimezone; // Remove...
+  date.getTimeZone = getTimeZone; // Remove...
+  date.setTimeZone = setTimeZone; // Remove...
   date.getTimezoneAbbr = getTimezoneAbbr;
   return date;
 }
@@ -397,4 +401,16 @@ function pad(num, padLen) {
   var padding = '0000';
   num = String(num);
   return padding.substring(0, padLen - num.length) + num;
+}
+
+function deprecated (name, func) {
+  var warned = false
+  return function () {
+    if (!warned) {
+      console.error(name + "() is deprecated and will be removed in a future version.")
+      console.error('Please use ' + func.name + '() instead.')
+      warned = true
+    }
+    return func.apply(this, arguments)
+  }
 }
