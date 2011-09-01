@@ -78,11 +78,9 @@ function listTimezones() {
   var cb = arguments[arguments.length - 1]
     , subset = (arguments.length > 1 ? arguments[0] : null)
 
-  return listTimezonesFolder(subset ? subset + "/" : "", subset ? path.join(TZDIR, "/" + subset) : TZDIR, function (err ,tzs) {
+  return listTimezonesFolder(subset ? subset + "/" : "", subset ? path.join(TZDIR, "/" + subset) : TZDIR, function (err, tzs) {
     if (err) return cb(err);
-
-    tzs.sort();
-    return cb(null, tzs);
+    cb(null, tzs.sort());
   });
 }
 exports.listTimezones = listTimezones;
@@ -96,9 +94,9 @@ function listTimezonesFolder(prefix, folder, cb) {
     var pending_stats = files.length;
 
     for (var i = 0; i < files.length; i++) {
-      if (TZ_BLACKLIST.indexOf(files[i]) != -1
-      || files[i].indexOf(".") >= 0
-      || files[i][0].toUpperCase() != files[i][0]) {
+      if (~TZ_BLACKLIST.indexOf(files[i])
+          || files[i].indexOf(".") >= 0
+          || files[i][0].toUpperCase() != files[i][0]) {
         pending_stats--;
         continue
       }
