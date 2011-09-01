@@ -81,10 +81,6 @@ function listTimezones() {
   return listTimezonesFolder(subset ? subset + "/" : "", subset ? path.join(TZDIR, "/" + subset) : TZDIR, function (err ,tzs) {
     if (err) return cb(err);
 
-    if (subset) {
-      tzs = tzs.map(function (tz) { return tz.substr(subset.length + 1); });
-    }
-
     tzs.sort();
     return cb(null, tzs);
   });
