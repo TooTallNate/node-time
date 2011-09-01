@@ -1,7 +1,8 @@
 var bindings = require('./time.node')
   , MILLIS_PER_SECOND = 1000
   , DAYS_OF_WEEK = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
-  , MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  , MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
+  , TZ_BLACKLIST = [ 'SystemV', 'Etc' ];
 
 exports.currentTimezone = process.env.TZ;
 exports.time = bindings.time;
@@ -64,6 +65,70 @@ function tzset(tz) {
   return rtn;
 }
 exports.tzset = tzset;
+
+function listTimezones() {
+  if (arguments.length == 0) {
+    throw new Error("You must set a callback");
+  }
+  if (typeof arguments[arguments.length - 1] != "function") {
+    throw new Error("You must set a callback");
+  }
+  var cb = arguments[arguments.length - 1]
+    , subset = (arguments.length > 1 ? arguments[0] : null)
+    , path = require("path");
+
+  return listTimezonesFolder(subset ? subset + "/" : "", subset ? path.join(TZDIR, "/" + subset) : TZDIR, function (err ,tzs) {
+    if (err) return cb(err);
+
+    if (subset) {
+      tzs = tzs.map(function (tz) { return tz.substr(subset.length + 1); });
+    }
+
+    tzs.sort();
+    return cb(null, tzs);
+  });
+}
+exports.listTimezones = listTimezones;
+
+function listTimezonesFolder(prefix, folder, cb) {
+  var fs = require("fs")
+    , path = require("path")
+    , timezones = [];
+
+  fs.readdir(folder, function (err, files) {
+    if (err) return cb(err);
+
+    var pending_stats = files.length;
+
+    for (var i = 0; i < files.length; i++) {
+      if (TZ_BLACKLIST.indexOf(files[i]) != -1
+      || files[i].indexOf(".") >= 0
+      || files[i][0].toUpperCase() != files[i][0]) {
+        pending_stats--;
+        continue
+      }
+      fs.stat(path.join(folder, files[i]), (function (file) {
+          return function (err, stats) {
+            if (!err) {
+              if (stats.isDirectory()) {
+                listTimezonesFolder(prefix + file + "/", path.join(folder, file), function (err, tzs) {
+                  if (!err) {
+                    timezones = timezones.concat(tzs);
+                  }
+                  pending_stats--;
+                  if (pending_stats == 0) cb(null, timezones);
+                });
+                return;
+              }
+              if (prefix.length > 0) timezones.push(prefix + file.replace('_', ' '));
+            }
+            pending_stats--;
+            if (pending_stats == 0) cb(null, timezones);
+          };
+        })(files[i]));
+    }
+  });
+}
 
 // The "setTimezone" function is the "entry point" for a Date instance.
 // It must be called after an instance has been created. After, the 'getSeconds()',
