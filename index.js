@@ -1,4 +1,6 @@
-var bindings = require('./time.node')
+var fs = require('fs')
+  , path = require('path')
+  , bindings = require('./time.node')
   , MILLIS_PER_SECOND = 1000
   , DAYS_OF_WEEK = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
   , MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
@@ -26,7 +28,7 @@ var TZDIR = process.env.TZDIR;
 while (!TZDIR && possibleTzdirs.length > 0) {
   try {
     var d = possibleTzdirs.shift();
-    if (require('fs').statSync(d).isDirectory())
+    if (fs.statSync(d).isDirectory())
       TZDIR = d;
   } catch(e) {}
 }
@@ -38,7 +40,7 @@ if (!TZDIR) throw new Error("FATAL: Couldn't determine the location of your time
 // node-time tries to automatically determine the current timezone for you.
 if (!process.env.TZ) {
   try {
-    var currentTimezonePath = require('fs').readlinkSync('/etc/localtime');
+    var currentTimezonePath = fs.readlinkSync('/etc/localtime');
     if (currentTimezonePath.substring(0, TZDIR.length) === TZDIR)
       // Got It!
       exports.currentTimezone = process.env.TZ = currentTimezonePath.substring(TZDIR.length + 1);
@@ -75,7 +77,6 @@ function listTimezones() {
   }
   var cb = arguments[arguments.length - 1]
     , subset = (arguments.length > 1 ? arguments[0] : null)
-    , path = require("path");
 
   return listTimezonesFolder(subset ? subset + "/" : "", subset ? path.join(TZDIR, "/" + subset) : TZDIR, function (err ,tzs) {
     if (err) return cb(err);
@@ -91,9 +92,7 @@ function listTimezones() {
 exports.listTimezones = listTimezones;
 
 function listTimezonesFolder(prefix, folder, cb) {
-  var fs = require("fs")
-    , path = require("path")
-    , timezones = [];
+  var timezones = [];
 
   fs.readdir(folder, function (err, files) {
     if (err) return cb(err);
