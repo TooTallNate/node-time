@@ -115,7 +115,7 @@ function listTimezonesFolder(prefix, folder, cb) {
                 });
                 return;
               }
-              if (prefix.length > 0) timezones.push(prefix + file.replace('_', ' '));
+              if (prefix.length > 0) timezones.push(prefix + file);
             }
             pending_stats--;
             if (pending_stats == 0) cb(null, timezones);
