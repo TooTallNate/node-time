@@ -81,6 +81,7 @@ var relative = new time.Date()
   , da = relative.getDate()
   , mo = relative.getMonth()
   , ye = relative.getFullYear()
+  , t  = relative.getTime()
 
 relative.setTimezone('UTC', true)
 
@@ -91,3 +92,4 @@ assert.equal(ho, relative.getHours())
 assert.equal(da, relative.getDate())
 assert.equal(mo, relative.getMonth())
 assert.equal(ye, relative.getFullYear())
+assert.notEqual(t, relative.getTime())
