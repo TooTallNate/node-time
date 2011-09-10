@@ -8,7 +8,7 @@
   },
   "author": "Nathan Rajlich <nathan@tootallnate.net> (http://tootallnate.net)",
   "contributors": [
-    { "name": "Diogo Resende", "email": "dresende@thinkdigital.pt" },
+    { "name": "Diogo Resende", "email": "dresende@thinkdigital.pt" }
   ],
   "main": "./index.js",
   "scripts": {
