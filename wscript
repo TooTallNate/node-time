@@ -1,4 +1,7 @@
-
+import sys
+import Options
+from os import unlink, rename, symlink, popen
+from os.path import exists
 
 def set_options(opt):
   opt.tool_options("compiler_cxx")
@@ -43,3 +46,12 @@ def build(bld):
   obj.cxxflags = ["-g", "-D_FILE_OFFSET_BITS=64", "-D_LARGEFILE_SOURCE", "-Wall"]
   obj.target = "time"
   obj.source = "time.cc"
+
+def shutdown():
+  if Options.commands['clean']:
+    if exists('time.node'): unlink('time.node')
+  elif Options.commands['build']:
+    if exists('build/Release/time.node') and not exists('time.node'):
+      rename('build/Release/time.node', 'time.node')
+    if exists('build/default/time.node') and not exists('time.node'):
+      rename('build/default/time.node', 'time.node')

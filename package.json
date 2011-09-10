@@ -12,7 +12,7 @@
   ],
   "main": "./index.js",
   "scripts": {
-    "preinstall": "./build.sh",
+    "preinstall": "node-waf clean || true; node-waf configure build",
     "test": "node test.js"
   },
   "engines": {
