@@ -4,7 +4,7 @@ node-time
 
 
 This module offers simple bindings for the C [time.h][] APIs.
-It also offers an extended regular `Date` object with `getTimezone()`
+It also offers an extended native `Date` object with `getTimezone()`
 and `setTimezone()` functions, which aren't normally part of JavaScript.
 
 
