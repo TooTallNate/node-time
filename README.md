@@ -27,7 +27,7 @@ now.setTimezone("America/New_York");
 
 
 // You can also set the timezone during instantiation
-var azDate = new Date(2010, 0, 1, 'America/Phoenix');
+var azDate = new time.Date(2010, 0, 1, 'America/Phoenix');
 azDate.getTimezone(); // 'America/Phoenix'
 ```
 
