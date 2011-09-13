@@ -445,6 +445,7 @@ Object.defineProperty(Date, 'UTC', { value: _Date.UTC, writable: true, enumerabl
 // Turns a "regular" Date instance into one of our "extended" Date instances.
 // The return value is negligible, as the original Date instance is modified.
 exports.extend = function extend (date) {
+  if (!date) return date;
   date.getTimezone = getTimezone;
   date.setTimezone = setTimezone;
   date.getTimeZone = getTimeZone; // Remove...
