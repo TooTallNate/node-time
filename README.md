@@ -8,6 +8,16 @@ It also offers an extended native `Date` object with `getTimezone()`
 and `setTimezone()` functions, which aren't normally part of JavaScript.
 
 
+Installation
+------------
+
+`node-time` is available through npm:
+
+``` shell
+$ npm install time
+```
+
+
 Example
 -------
 
