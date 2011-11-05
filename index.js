@@ -23,6 +23,7 @@ var _Date = process.env.NODE_MODULE_CONTEXTS ? Date : require('vm').runInNewCont
 var possibleTzdirs = [
     '/usr/share/zoneinfo'
   , '/usr/lib/zoneinfo'
+  , '/usr/share/lib/zoneinfo'
 ];
 var TZDIR = process.env.TZDIR;
 while (!TZDIR && possibleTzdirs.length > 0) {
