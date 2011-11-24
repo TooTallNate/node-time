@@ -73,7 +73,7 @@ assert.ok(time.Date !== Date);
 // of changing the local get* functions on the Date instance to match the
 // timezone's representation of the internal UTC time, the local values are
 // instead retained, and the Date's internal UTC time is adjusted to match so:
-var relative = new time.Date()
+var relative = new time.Date(2000, 1, 1, 'America/Los_Angeles')
   , ms = relative.getMilliseconds()
   , se = relative.getSeconds()
   , mi = relative.getMinutes()
@@ -83,7 +83,9 @@ var relative = new time.Date()
   , ye = relative.getFullYear()
   , t  = relative.getTime()
 
+console.error('before: %s', relative);
 relative.setTimezone('UTC', true)
+console.error('after:  %s', relative);
 
 assert.equal(ms, relative.getMilliseconds())
 assert.equal(se, relative.getSeconds())
