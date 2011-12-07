@@ -14,7 +14,7 @@ Installation
 
 `node-time` is available through npm:
 
-``` shell
+``` bash
 $ npm install time
 ```
 
