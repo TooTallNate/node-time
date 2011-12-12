@@ -19,10 +19,8 @@
   "engines": {
     "node": "*"
   },
-  "directories": {},
-  "files": [
-    ""
-  ],
-  "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+      "mocha": "*"
+    , "should": "*"
+  }
 }
