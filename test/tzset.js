@@ -30,4 +30,28 @@ describe('tzset()', function () {
     process.env.TZ.should.equal('US/Pacific')
   })
 
+  it('should work with known values', function () {
+    var info
+
+    info = time.tzset('UTC')
+    info.tzname[0].should.equal('UTC')
+    info.timezone.should.equal(0)
+    info.daylight.should.equal(0)
+
+    info = time.tzset('America/Los_Angeles')
+    info.tzname[0].should.equal('PST')
+    info.tzname[1].should.equal('PDT')
+    info.timezone.should.not.equal(0)
+
+    info = time.tzset('America/Phoenix')
+    info.tzname[0].should.equal('MST')
+    info.tzname[1].should.equal('MDT')
+    info.timezone.should.not.equal(0)
+
+    info = time.tzset('Europe/Copenhagen')
+    info.tzname[0].should.equal('CET')
+    info.tzname[1].should.equal('CEST')
+    info.timezone.should.not.equal(0)
+  })
+
 })
