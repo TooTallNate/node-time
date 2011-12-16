@@ -36,4 +36,29 @@ describe('exports', function () {
     time.currentTimezone.should.not.be.empty
   })
 
+
+  describe('Date', function () {
+
+    it('should have a "Date" property', function () {
+      time.should.have.property('Date')
+    })
+
+    it('should *not* be the global "Date" object', function () {
+      time.Date.should.not.equal(Date)
+    })
+
+    it('should already have the node-time extensions', function () {
+      should.exist(time.Date.prototype.setTimezone)
+      should.exist(time.Date.prototype.getTimezone)
+      should.exist(time.Date.prototype.getTimezoneAbbr)
+    })
+
+    it('should have all the regular Date properties', function () {
+      time.Date.should.have.property('now')
+      time.Date.should.have.property('parse')
+      time.Date.should.have.property('UTC')
+    })
+
+  })
+
 })
