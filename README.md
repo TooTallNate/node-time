@@ -42,7 +42,7 @@ var azDate = new time.Date(2010, 0, 1, 'America/Phoenix');
 azDate.getTimezone(); // 'America/Phoenix'
 ```
 
-### Extending your own `Date` object
+### Extending the global `Date` object
 
 `node-time` provides a convenient `time.Date` object, which is it's own Date
 constructor independent from your own (or the global) Date object. There are often
