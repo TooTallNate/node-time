@@ -25,7 +25,7 @@ exports = module.exports = function (Date) {
   p.getTimezone = getTimezone;
   p.setTimezone = setTimezone;
   p.getTimezoneAbbr = getTimezoneAbbr;
-  return Date;
+  return exports;
 }
 
 /**
