@@ -45,5 +45,33 @@ describe('Date', function () {
       d.getHours().should.not.equal(hours)
     })
 
+
+    describe('relative', function () {
+
+      it('should keep local values, but change the timezone', function () {
+        var d = new time.Date
+          , millis = d.getMilliseconds()
+          , seconds = d.getSeconds()
+          , minutes = d.getMinutes()
+          , hours = d.getHours()
+          , date = d.getDate()
+          , month = d.getMonth()
+          , year = d.getFullYear()
+
+        d.setTimezone('US/Pacific', true)
+
+        d.getMilliseconds().should.equal(millis)
+        d.getSeconds().should.equal(seconds)
+        d.getMinutes().should.equal(minutes)
+        d.getHours().should.equal(hours)
+        d.getDate().should.equal(date)
+        d.getMonth().should.equal(month)
+        d.getFullYear().should.equal(year)
+        d.getTimezone().should.not.equal(process.env.TZ)
+
+      })
+
+    })
+
   })
 })
