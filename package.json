@@ -19,6 +19,9 @@
   "engines": {
     "node": "*"
   },
+  "dependencies": {
+      "debug": "*"
+  },
   "devDependencies": {
       "mocha": "*"
     , "should": "*"
