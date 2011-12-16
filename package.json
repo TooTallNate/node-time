@@ -14,7 +14,7 @@
   "main": "./index.js",
   "scripts": {
     "preinstall": "node-waf clean || true; node-waf configure build",
-    "test": "make test"
+    "test": "mocha"
   },
   "engines": {
     "node": "*"
