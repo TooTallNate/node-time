@@ -1,4 +1,10 @@
-var fs = require('fs')
+
+/**
+ * Module dependencies.
+ */
+
+var debug = require('debug')('time')
+  , fs = require('fs')
   , path = require('path')
   , bindings = require('./time.node')
   , MILLIS_PER_SECOND = 1000
@@ -6,59 +12,130 @@ var fs = require('fs')
   , MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
   , TZ_BLACKLIST = [ 'SystemV', 'Etc' ];
 
+/**
+ * Extends a "Date" constructor with node-time's extensions.
+ * By default, `time.Date` is extended with this function.
+ * If you want the global your your module-specific Date to be extended,
+ * then invoke this function on the Date constructor.
+ */
+
+exports = module.exports = function (Date) {
+  debug('extending Date constructor');
+  var p = Date.prototype;
+  p.getTimezone = getTimezone;
+  p.setTimezone = setTimezone;
+  p.getTimezoneAbbr = getTimezoneAbbr;
+  return Date;
+}
+
+/**
+ * The initial timezone of the process. This env var may initially be undefined,
+ * in which case node-time will attempt to resolve and set the variable.
+ */
 
 exports.currentTimezone = process.env.TZ;
+
+/**
+ * Export the raw functions from the bindings.
+ */
+
 exports.time = bindings.time;
 exports.localtime = bindings.localtime;
 exports.mktime = bindings.mktime;
 
-// A "hack" of sorts to Force getting our own Date instance.
-// Otherwise, in some cases, the global Natives are shared between
-// contexts (not what we want)...
-var _Date = process.env.NODE_MODULE_CONTEXTS ? Date : require('vm').runInNewContext("Date");
+/**
+ * A "hack" of sorts to force getting our own Date instance.
+ * Otherwise, in normal cases, the global Natives are shared between
+ * contexts (not what we want)...
+ */
 
-// During startup, we synchronously attempt to determine the location of the
-// timezone dir, or TZDIR on some systems. This isn't necessary for the
-// C bindings, however it's needed for the `listTimezones()` function and for
-// resolving the 'initial' timezone to use.
+var _Date = process.env.NODE_MODULE_CONTEXTS
+  ? Date
+  : require('vm').runInNewContext("Date");
+
+/**
+ * Add the node-time extensions (setTimezone(), etc.)
+ */
+
+exports(_Date);
+
+/**
+ * During startup, we synchronously attempt to determine the location of the
+ * timezone dir, or TZDIR on some systems. This isn't necessary for the
+ * C bindings, however it's needed for the `listTimezones()` function and for
+ * resolving the 'initial' timezone to use.
+ */
+
+debug('attempting to resolve timezone directory.');
 var possibleTzdirs = [
     '/usr/share/zoneinfo'
   , '/usr/lib/zoneinfo'
   , '/usr/share/lib/zoneinfo'
 ];
 var TZDIR = process.env.TZDIR;
-while (!TZDIR && possibleTzdirs.length > 0) {
+if (TZDIR) {
+  debug('got env-defined TZDIR:', TZDIR);
+  possibleTzdirs.unshift(TZDIR);
+}
+while (possibleTzdirs.length > 0) {
+  var d = possibleTzdirs.shift();
+  debug('checking if directory exists:', d);
   try {
-    var d = possibleTzdirs.shift();
-    if (fs.statSync(d).isDirectory())
+    if (fs.statSync(d).isDirectory()) {
       TZDIR = d;
-  } catch(e) {}
+      break;
+    }
+  } catch (e) {
+    debug(e);
+  }
 }
 possibleTzdirs = null; // garbage collect
-if (!TZDIR) throw new Error("FATAL: Couldn't determine the location of your timezone directory!");
-
-// Older versions of node-time would require the user to have the TZ
-// environment variable set, otherwise undesirable results would happen. Now
-// node-time tries to automatically determine the current timezone for you.
-if (!process.env.TZ) {
-  try {
-    var currentTimezonePath = fs.readlinkSync('/etc/localtime');
-    if (currentTimezonePath.substring(0, TZDIR.length) === TZDIR)
-      // Got It!
-      exports.currentTimezone = process.env.TZ = currentTimezonePath.substring(TZDIR.length + 1);
-  } catch(e) {}
+if (TZDIR) {
+  debug('found timezone directory at:', TZDIR);
+} else {
+  debug('WARN: Could not find timezone directory. listTimezones() won\'t work');
 }
 
-// The user-facing 'tzset' function accepts a timezone String
-// to set to, and returns an object with the zoneinfo for the
-// timezone.
-function tzset(tz) {
+/**
+ * Older versions of node-time would require the user to have the TZ
+ * environment variable set, otherwise undesirable results would happen. Now
+ * node-time tries to automatically determine the current timezone for you.
+ */
+
+if (!exports.currentTimezone) {
+  debug('`process.env.TZ` not initially set, attempting to resolve');
+  try {
+    var currentTimezonePath = fs.readlinkSync('/etc/localtime');
+    if (currentTimezonePath.substring(0, TZDIR.length) === TZDIR) {
+      // Got It!
+      var zone = currentTimezonePath.substring(TZDIR.length + 1);
+      exports.currentTimezone = process.env.TZ = zone;
+      debug('resolved initial timezone:', zone);
+    }
+  } catch (e) {
+    debug(e);
+  }
+}
+
+/**
+ * The user-facing 'tzset' function is a thin wrapper around the native binding to
+ * 'tzset()'. This function accepts a timezone String to set the process' timezone
+ * to. Returns an object with the zoneinfo for the timezone.
+ *
+ * Throws (on *some* platforms) when the disired timezone could not be loaded.
+ *
+ * Sets the `currentTimezone` property on the exports.
+ */
+
+function tzset (tz) {
   if (tz) {
     process.env.TZ = tz;
   }
   var usedTz = process.env.TZ;
   var rtn = bindings.tzset();
+  debug('set the current timezone to:', usedTz);
   if (!rtn.tzname[1] && rtn.timezone === 0) {
+    debug('got bad zoneinfo object:', rtn);
     var err = new Error("Unknown Timezone: '" + usedTz + "'");
     for (var i in rtn) {
       err[i] = rtn[i];
@@ -66,11 +143,17 @@ function tzset(tz) {
     throw err;
   }
   exports.currentTimezone = usedTz;
+  exports._currentZoneinfo = rtn;
   return rtn;
 }
 exports.tzset = tzset;
 
-function listTimezones() {
+/**
+ * Lists the timezones that the current system can accept. It does this by going
+ * on a recursive walk through the timezone dir and collecting filenames.
+ */
+
+function listTimezones () {
   if (arguments.length == 0) {
     throw new Error("You must set a callback");
   }
@@ -125,11 +208,15 @@ function listTimezonesFolder(prefix, folder, cb) {
   });
 }
 
-// The "setTimezone" function is the "entry point" for a Date instance.
-// It must be called after an instance has been created. After, the 'getSeconds()',
-// 'getHours()', 'getDays()', etc. functions will return values relative
-// to the time zone specified.
-function setTimezone(timezone, relative) {
+/**
+ * The "setTimezone" function is the "entry point" for a Date instance.
+ * It must be called after an instance has been created. After, the 'getSeconds()',
+ * 'getHours()', 'getDays()', etc. functions will return values relative
+ * to the time zone specified.
+ */
+
+function setTimezone (timezone, relative) {
+  debug('Date#setTimezone(%s, %s)', timezone, relative);
 
   // If `true` is passed in as the second argument, then the Date instance
   // will have it's timezone set, but it's current local values will remain
@@ -144,13 +231,25 @@ function setTimezone(timezone, relative) {
     mo = this.getMonth()
     y  = this.getFullYear()
   }
-  var oldTz = exports.currentTimezone;
-  var tz = exports.tzset(timezone);
-  var zoneInfo = exports.localtime(this.getTime() / 1000);
+
+  // If the current process timezone doesn't match the desired timezone, then call
+  // tzset() to change the current timezone of the process.
+  var oldTz = exports.currentTimezone
+    , tz = exports._currentZoneinfo;
   if (oldTz != timezone) {
-    exports.tzset(oldTz);
-    oldTz = null;
+    debug('current timezone is not "%s", calling tzset()', timezone);
+    tz = exports.tzset(timezone);
   }
+
+  // Get the zoneinfo for this Date instance's time value
+  var zoneInfo = exports.localtime(this.getTime() / 1000);
+
+  // Change the timezone back if we changed it originally
+  if (oldTz != timezone) {
+    debug('setting timezone back to "%s"', oldTz);
+    exports.tzset(oldTz);
+  }
+  oldTz = null;
 
   // If we got to here without throwing an Error, then
   // a valid timezone was requested, and we should have
@@ -325,11 +424,11 @@ function setTimezone(timezone, relative) {
 
 
   // Used internally by the 'set*' functions above...
-  function reset() {
+  function reset () {
     this.setTimezone(this.getTimezone());
   }
   // 'mktime' calls 'reset' implicitly through 'setTime()'
-  function mktime() {
+  function mktime () {
     var oldTz = process.env.TZ;
     exports.tzset(this.getTimezone());
     zoneInfo.isDaylightSavings = -1; // Auto-detect the timezone
@@ -342,29 +441,20 @@ function setTimezone(timezone, relative) {
   }
 
 }
-_Date.prototype.setTimezone = setTimezone;
 
 // Returns a "String" of the last value set in "setTimezone".
 // TODO: Return something when 'setTimezone' hasn't been called yet.
-function getTimezone() {
+function getTimezone () {
   throw new Error('You must call "setTimezone(tz)" before "getTimezone()" may be called');
 }
-_Date.prototype.getTimezone = getTimezone;
 
 // NON-STANDARD: Returns the abbreviated timezone name, also taking daylight
 // savings into consideration. Useful for the presentation layer of a Date
 // instance.
-function getTimezoneAbbr() {
+function getTimezoneAbbr () {
   var str = this.toString().match(/\([A-Z]+\)/)[0];
   return str.substring(1, str.length-1);
 }
-_Date.prototype.getTimezoneAbbr = getTimezoneAbbr;
-
-// Deprecation warnings for timeZone functions
-var setTimeZone = deprecated('setTimeZone', setTimezone)
-  , getTimeZone = deprecated('getTimeZone', getTimezone)
-_Date.prototype.getTimeZone = getTimeZone
-_Date.prototype.setTimeZone = setTimeZone
 
 // Export the modified 'Date' instance. Users should either use this with the
 // 'new' operator, or extend an already existing Date instance with 'extend()'.
@@ -431,7 +521,6 @@ exports.Date = Date;
 
 // We also overwrite `Date.parse()`. It can accept an optional 'timezone'
 // second argument.
-var nativeParse = _Date.parse;
 function parse (dateStr, timezone) {
   return new Date(dateStr, timezone).getTime();
 }
@@ -446,32 +535,22 @@ Object.defineProperty(Date, 'UTC', { value: _Date.UTC, writable: true, enumerabl
 
 // Turns a "regular" Date instance into one of our "extended" Date instances.
 // The return value is negligible, as the original Date instance is modified.
+// DEPRECATED: Just extend the Date's prototype using the Date-extend function.
 exports.extend = function extend (date) {
   if (!date) return date;
   date.getTimezone = getTimezone;
   date.setTimezone = setTimezone;
-  date.getTimeZone = getTimeZone; // Remove...
-  date.setTimeZone = setTimeZone; // Remove...
   date.getTimezoneAbbr = getTimezoneAbbr;
   return date;
 }
 
 
-// Pads a number with 0s if required
-function pad(num, padLen) {
+/**
+ * Pads a number with 0s if required.
+ */
+
+function pad (num, padLen) {
   var padding = '0000';
   num = String(num);
   return padding.substring(0, padLen - num.length) + num;
-}
-
-function deprecated (name, func) {
-  var warned = false
-  return function () {
-    if (!warned) {
-      console.error(name + "() is deprecated and will be removed in a future version.")
-      console.error('Please use ' + func.name + '() instead.')
-      warned = true
-    }
-    return func.apply(this, arguments)
-  }
 }
