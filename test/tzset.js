@@ -18,6 +18,13 @@ describe('tzset()', function () {
     time.currentTimezone.should.equal('US/Pacific')
   })
 
+  it('should return a "zoneinfo" object', function () {
+    var info = time.tzset()
+    info.should.have.property('tzname').with.lengthOf(2)
+    info.should.have.property('timezone')
+    info.should.have.property('daylight')
+  })
+
   it('should set `process.env.TZ`', function () {
     time.tzset('US/Pacific')
     process.env.TZ.should.equal('US/Pacific')
