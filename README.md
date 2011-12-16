@@ -42,6 +42,21 @@ var azDate = new time.Date(2010, 0, 1, 'America/Phoenix');
 azDate.getTimezone(); // 'America/Phoenix'
 ```
 
+### Extending your own `Date` object
+
+`node-time` provides a convenient `time.Date` object, which is it's own Date
+constructor independent from your own (or the global) Date object. There are often
+times, however, when you would like the benefits of node-time on *all* Date
+instances. To extend the global Date object, simply pass it in as an argument to
+the node-time module when requiring:
+
+``` js
+var time = require('time')(Date);
+
+var d = new Date();
+d.setTimezone('UTC');
+```
+
 
 API
 ---
