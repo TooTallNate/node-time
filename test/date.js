@@ -8,6 +8,13 @@ describe('Date', function () {
       time.tzset('UTC')
     })
 
+    it('should clean up after itself', function () {
+      var initial = process.env.TZ
+        , d = new time.Date
+      d.setTimezone('America/Argentina/San_Juan')
+      initial.should.equal(process.env.TZ)
+    })
+
     it('should change the "timezone offset"', function () {
       var d = new time.Date
         , offset = d.getTimezoneOffset()
