@@ -123,8 +123,7 @@ date.getTimezone();
 #### date.getTimezoneAbbr() -> String
 
 Returns the abbreviated timezone name, also taking daylight savings into consideration.
-Useful for the presentation layer of a Date instance. This is a _NON-STANDARD_ extension
-to the Date object.
+Useful for the presentation layer of a Date instance.
 
 ``` javascript
 date.getTimezoneAbbr();
