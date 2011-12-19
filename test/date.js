@@ -55,7 +55,14 @@ describe('Date', function () {
 
     describe('relative', function () {
 
-      it('should keep local values, but change the timezone', function () {
+      it('should change the timezone', function () {
+        var d = new time.Date
+          , old = d.getTime()
+        d.setTimezone('US/Pacific', true)
+        d.getTimezone().should.not.equal(process.env.TZ)
+      })
+
+      it('should keep local values', function () {
         var d = new time.Date
           , millis = d.getMilliseconds()
           , seconds = d.getSeconds()
@@ -74,8 +81,13 @@ describe('Date', function () {
         d.getDate().should.equal(date)
         d.getMonth().should.equal(month)
         d.getFullYear().should.equal(year)
-        d.getTimezone().should.not.equal(process.env.TZ)
+      })
 
+      it('should change the date\'s internal time value', function () {
+        var d = new time.Date
+          , old = d.getTime()
+        d.setTimezone('US/Pacific', true)
+        d.getTime().should.not.equal(old)
       })
 
     })
