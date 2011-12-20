@@ -57,7 +57,6 @@ describe('Date', function () {
 
       it('should change the timezone', function () {
         var d = new time.Date
-          , old = d.getTime()
         d.setTimezone('US/Pacific', true)
         d.getTimezone().should.not.equal(process.env.TZ)
       })
