@@ -47,6 +47,23 @@ describe('exports', function () {
       time.Date.should.not.equal(Date)
     })
 
+    it('should return a real "Date" instance', function () {
+      var d = new time.Date
+      Object.prototype.toString.call(d).should.equal('[object Date]')
+    })
+
+    it('should pass `time.Date` instanceof', function () {
+      var d = new time.Date
+        , test = d instanceof time.Date
+      test.should.be.true
+    })
+
+    it('should not pass global instanceof', function () {
+      var d = new time.Date
+        , test = d instanceof Date
+      test.should.be.false
+    })
+
     it('should already have the node-time extensions', function () {
       should.exist(time.Date.prototype.setTimezone)
       should.exist(time.Date.prototype.getTimezone)
