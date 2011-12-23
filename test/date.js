@@ -8,6 +8,11 @@ describe('Date', function () {
     Object.prototype.toString.call(d).should.equal('[object Date]')
   })
 
+  it('should pass instanceof', function () {
+    var d = new time.Date
+      , test = d instanceof time.Date
+    test.should.be.true
+  })
 
   describe('#setTimezone()', function () {
 
