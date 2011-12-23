@@ -28,7 +28,7 @@ describe('exports', function () {
   })
 
   it('should throw if in invalid object is passed into it', function () {
-    should.throws(time)
+    time.should.throw()
   })
 
   it('should have a "currentTimezone" property', function () {
