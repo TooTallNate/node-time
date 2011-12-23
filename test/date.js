@@ -23,7 +23,7 @@ describe('Date', function () {
       d.getTimezoneOffset().should.not.equal(offset)
     })
 
-    it('should match the UTC values', function () {
+    it('should match the UTC values when set to "UTC"', function () {
       var d = new time.Date
       d.setTimezone('UTC')
       d.getUTCDay().should.equal(d.getDay())
