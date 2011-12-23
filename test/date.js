@@ -2,6 +2,13 @@ var should = require('should')
   , time = require('../')
 
 describe('Date', function () {
+
+  it('should return a "Date" instance', function () {
+    var d = new time.Date
+    Object.prototype.toString.call(d).should.equal('[object Date]')
+  })
+
+
   describe('#setTimezone()', function () {
 
     beforeEach(function () {
