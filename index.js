@@ -6,7 +6,7 @@
 var debug = require('debug')('time')
   , fs = require('fs')
   , path = require('path')
-  , bindings = require('./time.node')
+  , bindings = require('bindings')('time.node')
   , MILLIS_PER_SECOND = 1000
   , DAYS_OF_WEEK = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
   , MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']

@@ -20,7 +20,8 @@
     "node": "*"
   },
   "dependencies": {
-      "debug": "*"
+      "bindings": "*"
+    , "debug": "*"
   },
   "devDependencies": {
       "mocha": "*"
