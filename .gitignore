@@ -2,3 +2,8 @@ build
 .lock-wscript
 time.node
 node_modules
+Makefile.gyp
+bindings.Makefile
+gyp-mac-tool
+out/
+time.target.gyp.mk
