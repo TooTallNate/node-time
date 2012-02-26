@@ -14,6 +14,12 @@
           'defines': [
             'HAVE_TM_GMTOFF'
           ]
+        }],
+        ['OS=="solaris"', {
+          'defines': [
+            'HAVE_ALTZONE',
+            'HAVE_TIMEZONE'
+          ]
         }]
       ]
     }
