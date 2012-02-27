@@ -1,6 +1,5 @@
 build
 .lock-wscript
-time.node
 node_modules
 Makefile.gyp
 bindings.Makefile
