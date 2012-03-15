@@ -105,7 +105,8 @@ class Time {
   static Handle<Value> Mktime(const Arguments& args) {
     HandleScope scope;
     if (args.Length() < 1) {
-      return Undefined();
+      Local<String> message = String::New("localtime() Object expected");
+      return ThrowException(Exception::TypeError(message));
     }
 
     Local<Object> arg = args[0]->ToObject();
