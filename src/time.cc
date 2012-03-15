@@ -64,7 +64,7 @@ class Time {
 
     // Construct the 'tm' struct
     time_t rawtime = static_cast<time_t>(args[0]->Int32Value());
-    struct tm * timeinfo = localtime ( &rawtime );
+    struct tm *timeinfo = localtime( &rawtime );
 
     // Create the return "Object"
     Local<Object> obj = Object::New();
