@@ -44,7 +44,7 @@ azDate.getTimezone(); // 'America/Phoenix'
 
 ### Extending the global `Date` object
 
-`node-time` provides a convenient `time.Date` object, which is it's own Date
+`node-time` provides a convenient `time.Date` object, which is its own Date
 constructor independent from your own (or the global) Date object. There are often
 times, however, when you would like the benefits of node-time on *all* Date
 instances. To extend the global Date object, simply pass it in as an argument to
