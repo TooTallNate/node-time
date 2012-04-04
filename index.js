@@ -122,7 +122,7 @@ if (!exports.currentTimezone) {
  * 'tzset()'. This function accepts a timezone String to set the process' timezone
  * to. Returns an object with the zoneinfo for the timezone.
  *
- * Throws (on *some* platforms) when the disired timezone could not be loaded.
+ * Throws (on *some* platforms) when the desired timezone could not be loaded.
  *
  * Sets the `currentTimezone` property on the exports.
  */
