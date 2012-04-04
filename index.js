@@ -497,21 +497,9 @@ function Date (year, month, day, hour, minute, second, millisecond, timezone) {
       d = new _Date(year, month, day, hour, minute, second, millisecond); break;
   }
   if (timezone) {
-    // If a 'timezone' was supplied, then the "trick" is to create another Date
-    // instance with the 'setTimezone()' function called on it. After that, we
-    // can proxy all the 'set*()' calls to the new Date instance. This is
-    // pretty much a "hack", but it allows us to re-use the native Date
-    // constructor logic above...
-    var realD = new _Date(0);
-    realD.setTimezone(timezone);
-    realD.setMilliseconds(d.getMilliseconds());
-    realD.setSeconds(d.getSeconds());
-    realD.setMinutes(d.getMinutes());
-    realD.setHours(d.getHours());
-    realD.setDate(d.getDate());
-    realD.setMonth(d.getMonth());
-    realD.setFullYear(d.getFullYear());
-    d = realD;
+    // set time given timezone relative to the currently set local time
+    // (changing the internal "time" milliseconds value)
+    d.setTimezone(timezone, true);
   }
   return d;
 }
