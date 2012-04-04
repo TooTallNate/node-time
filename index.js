@@ -419,7 +419,7 @@ function setTimezone (timezone, relative) {
     this.setDate(d)
     this.setMonth(mo)
     this.setFullYear(y)
-    ms, s, m, h, d, mo, y = null
+    ms = s = m = h = d = mo = y = null
   }
 
 
