@@ -236,7 +236,7 @@ function setTimezone (timezone, relative) {
   // tzset() to change the current timezone of the process.
   var oldTz = exports.currentTimezone
     , tz = exports._currentZoneinfo;
-  if (oldTz != timezone) {
+  if (!tz || oldTz !== timezone) {
     debug('current timezone is not "%s", calling tzset()', timezone);
     tz = exports.tzset(timezone);
   }
