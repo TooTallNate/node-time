@@ -498,8 +498,8 @@ function Date (year, month, day, hour, minute, second, millisecond, timezone) {
   }
   if (timezone) {
     // set time given timezone relative to the currently set local time
-    // (changing the internal "time" milliseconds value)
-    d.setTimezone(timezone, true);
+    // (changing the internal "time" milliseconds value unless ms specified)
+    d.setTimezone(timezone, !(argc == 1 && typeof year === 'number'));
   }
   return d;
 }
