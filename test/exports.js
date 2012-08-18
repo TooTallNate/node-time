@@ -1,4 +1,5 @@
 var should = require('should')
+  , assert = require('assert')
   , time = require('../')
 
 describe('exports', function () {
@@ -33,7 +34,7 @@ describe('exports', function () {
 
   it('should have a "currentTimezone" property', function () {
     time.should.have.property('currentTimezone')
-    time.currentTimezone.should.not.be.empty
+    assert(time.currentTimezone)
   })
 
 
