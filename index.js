@@ -147,6 +147,10 @@ function tzset (tz) {
   debug('set the current timezone to:', usedTz);
   if (!rtn.tzname[1] && rtn.timezone === 0) {
     debug('got bad zoneinfo object:', rtn);
+    if (tz !== exports.currentTimezone) {
+      // restore original timezone in case of error
+      tzset(exports.currentTimezone);
+    }
     var err = new Error("Unknown Timezone: '" + usedTz + "'");
     for (var i in rtn) {
       err[i] = rtn[i];
@@ -249,13 +253,7 @@ function setTimezone (timezone, relative) {
     , tz = exports._currentZoneinfo;
   if (!tz || oldTz !== timezone) {
     debug('current timezone is not "%s", calling tzset()', timezone);
-    try {
-       tz = exports.tzset(timezone);
-    } catch(err) {
-       // If there was a invalid timezone, restore it back and rethrow
-       exports.tzset(oldTz);
-       throw err;
-    }
+    tz = exports.tzset(timezone);
   }
 
   // Get the zoneinfo for this Date instance's time value
