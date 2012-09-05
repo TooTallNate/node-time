@@ -249,7 +249,13 @@ function setTimezone (timezone, relative) {
     , tz = exports._currentZoneinfo;
   if (!tz || oldTz !== timezone) {
     debug('current timezone is not "%s", calling tzset()', timezone);
-    tz = exports.tzset(timezone);
+    try {
+       tz = exports.tzset(timezone);
+    } catch(err) {
+       // If there was a invalid timezone, restore it back and rethrow
+       exports.tzset(oldTz);
+       throw err;
+    }
   }
 
   // Get the zoneinfo for this Date instance's time value

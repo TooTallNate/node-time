@@ -51,6 +51,13 @@ describe('Date', function () {
       initial.should.equal(process.env.TZ)
     })
 
+    it('should clean up after an error', function () {
+      var initial = process.env.TZ
+        , d = new time.Date
+      d.setTimezone.bind(d, 'Any/Wrong/TZ').should.throw(/^Unknown Timezone/)
+      initial.should.equal(process.env.TZ)
+    })
+
     it('should change the "timezone offset"', function () {
       var d = new time.Date
         , offset = d.getTimezoneOffset()
