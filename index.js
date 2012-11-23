@@ -511,6 +511,8 @@ function Date (year, month, day, hour, minute, second, millisecond, timezone) {
     // set time given timezone relative to the currently set local time
     // (changing the internal "time" milliseconds value unless ms specified)
     d.setTimezone(timezone, !(argc == 1 && typeof year === 'number'));
+  } else {
+    d.setTimezone(exports.currentTimezone);
   }
   return d;
 }
