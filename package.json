@@ -13,7 +13,7 @@
   ],
   "main": "./index.js",
   "scripts": {
-    "test": "mocha --reporter spec"
+    "test": "TZ=UTC mocha --reporter spec"
   },
   "engines": {
     "node": "*"
