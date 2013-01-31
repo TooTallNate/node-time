@@ -126,6 +126,33 @@ describe('Date', function () {
         d.getTime().should.not.equal(old)
       })
 
+      it('should calculate correctly even between months', function () {
+        var forwards = {
+            timezone: 'US/Pacific', hour: 22, minute: 47,
+            year: 2013, month: 1, date: 31
+        };
+        var d = new time.Date(
+          forwards.year, forwards.month - 1, forwards.date,
+          forwards.hour, forwards.minute, 1, 1, forwards.timezone
+        );
+        d.toString().should.equal('Thu Jan 31 2013 22:47:01 GMT-0800 (PST)');
+        d.setTimezone('UTC');
+        d.toString().should.equal('Fri Feb 01 2013 06:47:01 GMT+0000 (UTC)');
+
+        var backwards = {
+            timezone: 'Australia/Sydney', hour: 2, minute: 47,
+            year: 2013, month: 2, date: 1
+        };
+        var d = new time.Date(
+          backwards.year, backwards.month - 1, backwards.date,
+          backwards.hour, backwards.minute, 1, 1, backwards.timezone
+        );
+        d.toString().should.equal('Fri Feb 01 2013 02:47:01 GMT+1100 (EST)');
+        d.setTimezone('UTC');
+        d.toString().should.equal('Thu Jan 31 2013 15:47:01 GMT+0000 (UTC)');
+
+      })
+
     })
 
   })
