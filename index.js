@@ -234,13 +234,13 @@ function setTimezone (timezone, relative) {
   // the same (i.e. the Date's internal time value will be changed)
   var ms, s, m, h, d, mo, y
   if (relative) {
-    ms = this.getMilliseconds()
-    s  = this.getSeconds()
-    m  = this.getMinutes()
-    h  = this.getHours()
-    d  = this.getDate()
-    mo = this.getMonth()
     y  = this.getFullYear()
+    mo = this.getMonth()
+    d  = this.getDate()
+    h  = this.getHours()
+    m  = this.getMinutes()
+    s  = this.getSeconds()
+    ms = this.getMilliseconds()
   }
 
   // If the current process timezone doesn't match the desired timezone, then call
@@ -423,13 +423,13 @@ function setTimezone (timezone, relative) {
   this.toLocaleString = this.toString;
 
   if (relative) {
-    this.setMilliseconds(ms)
-    this.setSeconds(s)
-    this.setMinutes(m)
-    this.setHours(h)
-    this.setDate(d)
-    this.setMonth(mo)
     this.setFullYear(y)
+    this.setMonth(mo)
+    this.setDate(d)
+    this.setHours(h)
+    this.setMinutes(m)
+    this.setSeconds(s)
+    this.setMilliseconds(ms)
     ms = s = m = h = d = mo = y = null
   }
 
