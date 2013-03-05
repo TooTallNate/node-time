@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -451,6 +450,7 @@ function setTimezone (timezone, relative) {
     return this.setTime( (t * MILLIS_PER_SECOND) + this.getMilliseconds() );
   }
 
+  return this;
 }
 
 // Returns a "String" of the last value set in "setTimezone".
