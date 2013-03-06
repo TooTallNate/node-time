@@ -52,6 +52,12 @@ describe('Date', function () {
       initial.should.equal(process.env.TZ)
     })
 
+    it('should be chainable', function () {
+      var initial = process.env.TZ
+        , d = new time.Date().setTimezone('America/Argentina/San_Juan')
+      d.getTimezone().should.equal('America/Argentina/San_Juan')
+    })
+
     it('should change the "timezone offset"', function () {
       var d = new time.Date()
         , offset = d.getTimezoneOffset()
