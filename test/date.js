@@ -113,7 +113,6 @@ describe('Date', function () {
           , date = d.getDate()
           , month = d.getMonth()
           , year = d.getFullYear()
-
         d.setTimezone('US/Pacific', true)
 
         d.getMilliseconds().should.equal(millis)
@@ -132,7 +131,7 @@ describe('Date', function () {
         d.getTime().should.not.equal(old)
       })
 
-      it('should calculate correctly even between months', function () {
+      it('should calculate correctly when UTC date is day after timezone date', function () {
         var forwards = {
             timezone: 'US/Pacific', hour: 22, minute: 47,
             year: 2013, month: 1, date: 31
@@ -144,19 +143,31 @@ describe('Date', function () {
         d.toString().should.equal('Thu Jan 31 2013 22:47:01 GMT-0800 (PST)');
         d.setTimezone('UTC');
         d.toString().should.equal('Fri Feb 01 2013 06:47:01 GMT+0000 (UTC)');
+      })
+
+      it('should calculate correctly when UTC date is day before timezone date', function () {
+        var d = new time.Date(2010, 0, 31, 19, 0, 0, 0, 'UTC');
+        d.toString().should.equal('Sun Jan 31 2010 19:00:00 GMT+0000 (UTC)')
 
         var backwards = {
             timezone: 'Australia/Sydney', hour: 2, minute: 47,
             year: 2013, month: 2, date: 1
         };
-        var d = new time.Date(
+
+        var d2 = new time.Date(
           backwards.year, backwards.month - 1, backwards.date,
           backwards.hour, backwards.minute, 1, 1, backwards.timezone
         );
-        d.toString().should.equal('Fri Feb 01 2013 02:47:01 GMT+1100 (EST)');
-        d.setTimezone('UTC');
-        d.toString().should.equal('Thu Jan 31 2013 15:47:01 GMT+0000 (UTC)');
+        d2.toString().should.equal('Fri Feb 01 2013 02:47:01 GMT+1100 (EST)');
+        d2.setTimezone('UTC');
+        d2.toString().should.equal('Thu Jan 31 2013 15:47:01 GMT+0000 (UTC)');
+      })
 
+      it('should calculate correctly on edge of months', function() {
+        var d = new time.Date("2013-02-01 01:02:03", 'US/Pacific');
+        d.toString().should.equal('Fri Feb 01 2013 01:02:03 GMT-0800 (PST)');
+        d.setTimezone('UTC');
+        d.toString().should.equal('Fri Feb 01 2013 09:02:03 GMT+0000 (UTC)');
       })
 
     })
