@@ -310,6 +310,14 @@ function setTimezone (timezone, relative) {
   this.getTimezoneAbbr = function getTimezoneAbbr() {
     return tz.tzname[zoneInfo.isDaylightSavings ? 1 : 0];
   }
+
+  // Sets day, month and year at once
+  this.setAllDateFields = function setAllDateFields(y,mo,d) {
+    zoneInfo.year = y - 1900;
+    zoneInfo.month = mo;
+    zoneInfo.dayOfMonth = d;
+    return mktime.call(this);
+  }
   // Sets the day of the month (from 1-31) in the current timezone
   this.setDate = function setDate(v) {
     zoneInfo.dayOfMonth = v;
@@ -422,9 +430,7 @@ function setTimezone (timezone, relative) {
   this.toLocaleString = this.toString;
 
   if (relative) {
-    this.setFullYear(y)
-    this.setMonth(mo)
-    this.setDate(d)
+    this.setAllDateFields(y,mo,d)
     this.setHours(h)
     this.setMinutes(m)
     this.setSeconds(s)
