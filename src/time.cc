@@ -63,7 +63,7 @@ class Time {
     HandleScope scope;
 
     // Construct the 'tm' struct
-    time_t rawtime = static_cast<time_t>(args[0]->Int32Value());
+    time_t rawtime = static_cast<time_t>(args[0]->IntegerValue());
     struct tm *timeinfo = localtime( &rawtime );
 
     // Create the return "Object"
@@ -121,7 +121,7 @@ class Time {
     tmstr.tm_isdst = arg->Get(String::NewSymbol("isDaylightSavings"))->Int32Value();
     // tm_wday and tm_yday are ignored for input, but properly set after 'mktime' is called
 
-    return scope.Close(Integer::New(mktime( &tmstr )));
+    return scope.Close(Number::New(static_cast<double>(mktime( &tmstr ))));
   }
 
 };
