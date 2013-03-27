@@ -37,6 +37,24 @@ describe('Date', function () {
       d1.getTimezone().should.equal('America/New_York')
       d2.getTimezone().should.equal('America/Los_Angeles')
     })
+
+
+    it('should parse strings around 2038', function() {
+
+      //Before threshold
+      var d = new time.Date('2037-12-31 11:59:59 PM', 'UTC')
+      d.getTime().should.equal(2145916799000)
+      //After threshold
+      d = new time.Date('2038-01-01 00:00:00 AM', 'UTC')
+      d.getTime().should.equal(2145916800000)
+      
+      //Before threshold
+      d = new time.Date('2038-1-19 03:14:06 AM', 'UTC')
+      d.getTime().should.equal(2147483646000)
+      //After threshold
+      d = new time.Date('2038-1-19 03:14:07 AM', 'UTC')
+      d.getTime().should.equal(2147483647000)
+    })
   })
 
   describe('#setTimezone()', function () {
