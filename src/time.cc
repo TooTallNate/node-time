@@ -68,36 +68,41 @@ class Time {
 
     // Create the return "Object"
     Local<Object> obj = Object::New();
-    obj->Set(String::NewSymbol("seconds"), Integer::New(timeinfo->tm_sec) );
-    obj->Set(String::NewSymbol("minutes"), Integer::New(timeinfo->tm_min) );
-    obj->Set(String::NewSymbol("hours"), Integer::New(timeinfo->tm_hour) );
-    obj->Set(String::NewSymbol("dayOfMonth"), Integer::New(timeinfo->tm_mday) );
-    obj->Set(String::NewSymbol("month"), Integer::New(timeinfo->tm_mon) );
-    obj->Set(String::NewSymbol("year"), Integer::New(timeinfo->tm_year) );
-    obj->Set(String::NewSymbol("dayOfWeek"), Integer::New(timeinfo->tm_wday) );
-    obj->Set(String::NewSymbol("dayOfYear"), Integer::New(timeinfo->tm_yday) );
-    obj->Set(String::NewSymbol("isDaylightSavings"), Boolean::New(timeinfo->tm_isdst > 0) );
+
+    if (timeinfo) {
+      obj->Set(String::NewSymbol("seconds"), Integer::New(timeinfo->tm_sec) );
+      obj->Set(String::NewSymbol("minutes"), Integer::New(timeinfo->tm_min) );
+      obj->Set(String::NewSymbol("hours"), Integer::New(timeinfo->tm_hour) );
+      obj->Set(String::NewSymbol("dayOfMonth"), Integer::New(timeinfo->tm_mday) );
+      obj->Set(String::NewSymbol("month"), Integer::New(timeinfo->tm_mon) );
+      obj->Set(String::NewSymbol("year"), Integer::New(timeinfo->tm_year) );
+      obj->Set(String::NewSymbol("dayOfWeek"), Integer::New(timeinfo->tm_wday) );
+      obj->Set(String::NewSymbol("dayOfYear"), Integer::New(timeinfo->tm_yday) );
+      obj->Set(String::NewSymbol("isDaylightSavings"), Boolean::New(timeinfo->tm_isdst > 0) );
 
 #if defined HAVE_TM_GMTOFF
-    // Only available with glibc's "tm" struct. Most Linuxes, Mac OS X...
-    obj->Set(String::NewSymbol("gmtOffset"), Integer::New(timeinfo->tm_gmtoff) );
-    obj->Set(String::NewSymbol("timezone"), String::NewSymbol(timeinfo->tm_zone) );
+      // Only available with glibc's "tm" struct. Most Linuxes, Mac OS X...
+      obj->Set(String::NewSymbol("gmtOffset"), Integer::New(timeinfo->tm_gmtoff) );
+      obj->Set(String::NewSymbol("timezone"), String::NewSymbol(timeinfo->tm_zone) );
 
 #elif defined HAVE_TIMEZONE
-    // Compatibility for Cygwin, Solaris, probably others...
-    long scd;
-    if (timeinfo->tm_isdst > 0) {
+      // Compatibility for Cygwin, Solaris, probably others...
+      long scd;
+      if (timeinfo->tm_isdst > 0) {
   #ifdef HAVE_ALTZONE
-      scd = -altzone;
+        scd = -altzone;
   #else
-      scd = -timezone + 3600;
+        scd = -timezone + 3600;
   #endif // HAVE_ALTZONE
-    } else {
-      scd = -timezone;
-    }
-    obj->Set(String::NewSymbol("gmtOffset"), Integer::New(scd));
-    obj->Set(String::NewSymbol("timezone"), String::NewSymbol(tzname[timeinfo->tm_isdst]));
+      } else {
+        scd = -timezone;
+      }
+      obj->Set(String::NewSymbol("gmtOffset"), Integer::New(scd));
+      obj->Set(String::NewSymbol("timezone"), String::NewSymbol(tzname[timeinfo->tm_isdst]));
 #endif // HAVE_TM_GMTOFF
+    } else {
+      obj->Set(String::NewSymbol("invalid"), True());
+    }
 
     return scope.Close(obj);
   }

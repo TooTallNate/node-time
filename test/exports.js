@@ -37,6 +37,16 @@ describe('exports', function () {
     assert(time.currentTimezone)
   })
 
+  describe('localtime()', function () {
+
+    // GH-40
+    it('should not segfault on a NaN Date value', function () {
+      var invalid = new Date(NaN)
+      var local = time.localtime(invalid.getTime())
+      assert.deepEqual({ invalid: true }, local)
+    });
+
+  });
 
   describe('Date', function () {
 
