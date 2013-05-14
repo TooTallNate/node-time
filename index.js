@@ -323,22 +323,25 @@ function setTimezone (timezone, relative) {
   // Sets the year (four digits) in the current timezone
   this.setFullYear = function setFullYear(y,mo,d) {
     zoneInfo.year = y - 1900;
-    if(typeof mo !== "undefined")
+    if(arguments.length > 1)
       zoneInfo.month = mo;
-    if(typeof d !== "undefined")
+    if(arguments.length > 2)
       zoneInfo.dayOfMonth = d;
     return mktime.call(this);
   }
   // Sets the hour (from 0-23) in the current timezone
   this.setHours = function setHours(h,m,s,ms) {
     zoneInfo.hours = h;
-    if(typeof m !== "undefined")
+    if(arguments.length > 1)
       zoneInfo.minutes = m;
-    if(typeof s !== "undefined")
+    if(arguments.length > 2)
       zoneInfo.seconds = s;
-    if(typeof ms !== "undefined")
-      ;
-    return mktime.call(this);
+    if(arguments.length > 3) {
+      mktime.call(this);
+      var diff = ms - this.getMilliseconds();
+      return this.setTime(this.getTime() + diff);
+    } else
+      return mktime.call(this);
   }
   // Sets the milliseconds (from 0-999) in the current timezone
   this.setMilliseconds = function setMilliseconds(ms) {
@@ -348,25 +351,31 @@ function setTimezone (timezone, relative) {
   // Set the minutes (from 0-59) in the current timezone
   this.setMinutes = function setMinutes(m,s,ms) {
     zoneInfo.minutes = m;
-    if(typeof s !== "undefined")
+    if(arguments.length > 1)
       zoneInfo.seconds = s;
-    if(typeof ms !== "undefined")
-      ;
-    return mktime.call(this);
+    if(arguments.length > 2) {
+      mktime.call(this);
+      var diff = ms - this.getMilliseconds();
+      return this.setTime(this.getTime() + diff);
+    } else
+      return mktime.call(this);
   }
   // Sets the month (from 0-11) in the current timezone
   this.setMonth = function setMonth(mo,d) {
     zoneInfo.month = mo;
-    if(typeof d !== "undefined")
+    if(arguments.length > 1)
       zoneInfo.dayOfMonth = d;
     return mktime.call(this);
   }
   // Sets the seconds (from 0-59) in the current timezone
   this.setSeconds = function setSeconds(s,ms) {
     zoneInfo.seconds = s;
-    if(typeof ms !== "undefined")
-      ;
-    return mktime.call(this);
+    if(arguments.length > 1) {
+      mktime.call(this);
+      var diff = ms - this.getMilliseconds();
+      return this.setTime(this.getTime() + diff);
+    } else
+      return mktime.call(this);
   }
   // Sets a date and time by adding or subtracting a specified number of
   // milliseconds to/from midnight January 1, 1970.
