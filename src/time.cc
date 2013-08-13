@@ -30,6 +30,7 @@ class Time {
   }
 
   static NAN_METHOD(Time_) {
+    NanScope();
     NanReturnValue(Integer::New(time(NULL)));
   }
 
