@@ -313,45 +313,69 @@ function setTimezone (timezone, relative) {
 
   // Sets day, month and year at once
   this.setAllDateFields = function setAllDateFields(y,mo,d) {
-    zoneInfo.year = y - 1900;
-    zoneInfo.month = mo;
+    return this.setFullYear(y,mo,d);
+  }
+  // Sets the day of the month (from 1-31) in the current timezone
+  this.setDate = function setDate(d) {
     zoneInfo.dayOfMonth = d;
     return mktime.call(this);
   }
-  // Sets the day of the month (from 1-31) in the current timezone
-  this.setDate = function setDate(v) {
-    zoneInfo.dayOfMonth = v;
-    return mktime.call(this);
-  }
   // Sets the year (four digits) in the current timezone
-  this.setFullYear = function setFullYear(v) {
-    zoneInfo.year = v - 1900;
+  this.setFullYear = function setFullYear(y,mo,d) {
+    zoneInfo.year = y - 1900;
+    if(arguments.length > 1)
+      zoneInfo.month = mo;
+    if(arguments.length > 2)
+      zoneInfo.dayOfMonth = d;
     return mktime.call(this);
   }
   // Sets the hour (from 0-23) in the current timezone
-  this.setHours = function setHours(v) {
-    zoneInfo.hours = v;
-    return mktime.call(this);
+  this.setHours = function setHours(h,m,s,ms) {
+    zoneInfo.hours = h;
+    if(arguments.length > 1)
+      zoneInfo.minutes = m;
+    if(arguments.length > 2)
+      zoneInfo.seconds = s;
+    if(arguments.length > 3) {
+      mktime.call(this);
+      var diff = ms - this.getMilliseconds();
+      return this.setTime(this.getTime() + diff);
+    } else
+      return mktime.call(this);
   }
   // Sets the milliseconds (from 0-999) in the current timezone
-  this.setMilliseconds = function setMilliseconds(v) {
-    var diff = v - this.getMilliseconds();
+  this.setMilliseconds = function setMilliseconds(ms) {
+    var diff = ms - this.getMilliseconds();
     return this.setTime(this.getTime() + diff);
   }
   // Set the minutes (from 0-59) in the current timezone
-  this.setMinutes = function setMinutes(v) {
-    zoneInfo.minutes = v;
-    return mktime.call(this);
+  this.setMinutes = function setMinutes(m,s,ms) {
+    zoneInfo.minutes = m;
+    if(arguments.length > 1)
+      zoneInfo.seconds = s;
+    if(arguments.length > 2) {
+      mktime.call(this);
+      var diff = ms - this.getMilliseconds();
+      return this.setTime(this.getTime() + diff);
+    } else
+      return mktime.call(this);
   }
   // Sets the month (from 0-11) in the current timezone
-  this.setMonth = function setMonth(v) {
-    zoneInfo.month = v;
+  this.setMonth = function setMonth(mo,d) {
+    zoneInfo.month = mo;
+    if(arguments.length > 1)
+      zoneInfo.dayOfMonth = d;
     return mktime.call(this);
   }
   // Sets the seconds (from 0-59) in the current timezone
-  this.setSeconds = function setSeconds(v) {
-    zoneInfo.seconds = v;
-    return mktime.call(this);
+  this.setSeconds = function setSeconds(s,ms) {
+    zoneInfo.seconds = s;
+    if(arguments.length > 1) {
+      mktime.call(this);
+      var diff = ms - this.getMilliseconds();
+      return this.setTime(this.getTime() + diff);
+    } else
+      return mktime.call(this);
   }
   // Sets a date and time by adding or subtracting a specified number of
   // milliseconds to/from midnight January 1, 1970.
@@ -363,44 +387,82 @@ function setTimezone (timezone, relative) {
     return rtn;
   }
   // Sets the day of the month, according to universal time (from 1-31)
-  this.setUTCDate = function setUTCDate(v) {
-    var rtn = _Date.prototype.setUTCDate.call(this, v);
+  this.setUTCDate = function setUTCDate(d) {
+    var rtn = _Date.prototype.setUTCDate.call(this, d);
     reset.call(this);
     return rtn;
   }
   // Sets the year, according to universal time (four digits)
-  this.setUTCFullYear = function setUTCFullYear(v) {
-    var rtn = _Date.prototype.setUTCFullYear.call(this, v);
+  this.setUTCFullYear = function setUTCFullYear(y,mo,d) {
+    var rtn;
+    switch(arguments.length) {
+      case 1:
+        rtn = _Date.prototype.setUTCFullYear.call(this, y); break;
+      case 2:
+        rtn = _Date.prototype.setUTCFullYear.call(this, y,mo); break;
+      case 3:
+        rtn = _Date.prototype.setUTCFullYear.call(this, y,mo,d); break;
+    }
     reset.call(this);
     return rtn;
   }
   // Sets the hour, according to universal time (from 0-23)
-  this.setUTCHours = function setUTCHours(v) {
-    var rtn = _Date.prototype.setUTCHours.call(this, v);
+  this.setUTCHours = function setUTCHours(h,m,s,ms) {
+    var rtn;
+    switch(arguments.length) {
+      case 1:
+        rtn = _Date.prototype.setUTCHours.call(this, h); break;
+      case 2:
+        rtn = _Date.prototype.setUTCHours.call(this, h,m); break;
+      case 3:
+        rtn = _Date.prototype.setUTCHours.call(this, h,m,s); break;
+      case 4:
+        rtn = _Date.prototype.setUTCHours.call(this, h,m,s,ms); break;
+    }
     reset.call(this);
     return rtn;
   }
   // Sets the milliseconds, according to universal time (from 0-999)
-  this.setUTCMilliseconds = function setUTCMillseconds(v) {
-    var rtn = _Date.prototype.setUTCMilliseconds.call(this, v);
+  this.setUTCMilliseconds = function setUTCMillseconds(ms) {
+    var rtn = _Date.prototype.setUTCMilliseconds.call(this, ms);
     reset.call(this);
     return rtn;
   }
   // Set the minutes, according to universal time (from 0-59)
-  this.setUTCMinutes = function setUTCMinutes(v) {
-    var rtn = _Date.prototype.setUTCMinutes.call(this, v);
+  this.setUTCMinutes = function setUTCMinutes(m,s,ms) {
+    var rtn;
+    switch(arguments.length) {
+      case 1:
+        rtn = _Date.prototype.setUTCMinutes.call(this, m); break;
+      case 2:
+        rtn = _Date.prototype.setUTCMinutes.call(this, m,s); break;
+      case 3:
+        rtn = _Date.prototype.setUTCMinutes.call(this, m,s,ms); break;
+    }
     reset.call(this);
     return rtn;
   }
   // Sets the month, according to universal time (from 0-11)
-  this.setUTCMonth = function setUTCMonth(v) {
-    var rtn = _Date.prototype.setUTCMonth.call(this, v);
+  this.setUTCMonth = function setUTCMonth(mo,d) {
+    var rtn;
+    switch(arguments.length) {
+      case 1:
+        rtn = _Date.prototype.setUTCMonth.call(this, mo); break;
+      case 2:
+        rtn = _Date.prototype.setUTCMonth.call(this, mo,d); break;
+    }
     reset.call(this);
     return rtn;
   }
   // Set the seconds, according to universal time (from 0-59)
-  this.setUTCSeconds = function setUTCSeconds(v) {
-    var rtn = _Date.prototype.setUTCSeconds.call(this, v);
+  this.setUTCSeconds = function setUTCSeconds(s,ms) {
+    var rtn;
+    switch(arguments.length) {
+      case 1:
+        rtn = _Date.prototype.setUTCSeconds.call(this, s); break;
+      case 2:
+        rtn = _Date.prototype.setUTCSeconds.call(this, s,ms); break;
+    }
     reset.call(this);
     return rtn;
   }

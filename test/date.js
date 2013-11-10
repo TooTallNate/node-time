@@ -57,6 +57,52 @@ describe('Date', function () {
     })
   })
 
+  it('should accept js1.3 extended set* arguments', function() {
+
+    var d = new time.Date(2000, 1, 2, 3, 4, 5, 6, 'America/Chicago');
+    d.setFullYear(2001, 2, 3);
+    d.getTime().should.equal(983610245006);
+    d.setFullYear(2002, 3);
+    d.getTime().should.equal(1017824645006);
+    d.setMonth(4, 5);
+    d.getTime().should.equal(1020585845006);
+    d.setHours(4, 5, 6, 7);
+    d.getTime().should.equal(1020589506007);
+    d.setHours(5, 6, 7);
+    d.getTime().should.equal(1020593167007);
+    d.setHours(6, 7);
+    d.getTime().should.equal(1020596827007);
+    d.setMinutes(8, 9, 10);
+    d.getTime().should.equal(1020596889010);
+    d.setMinutes(9, 10);
+    d.getTime().should.equal(1020596950010);
+    d.setSeconds(11, 12);
+    d.getTime().should.equal(1020596951012);
+  })
+
+  it('should accept js1.3 extended setUTC* arguments', function() {
+
+    var d = new time.Date(2000, 1, 2, 3, 4, 5, 6, 'America/Chicago');
+    d.setUTCFullYear(2001, 2, 3);
+    d.getTime().should.equal(983610245006);
+    d.setUTCFullYear(2002, 3);
+    d.getTime().should.equal(1017824645006);
+    d.setUTCMonth(4, 5);
+    d.getTime().should.equal(1020589445006);
+    d.setUTCHours(4, 5, 6, 7);
+    d.getTime().should.equal(1020571506007);
+    d.setUTCHours(5, 6, 7);
+    d.getTime().should.equal(1020575167007);
+    d.setUTCHours(6, 7);
+    d.getTime().should.equal(1020578827007);
+    d.setUTCMinutes(8, 9, 10);
+    d.getTime().should.equal(1020578889010);
+    d.setUTCMinutes(9, 10);
+    d.getTime().should.equal(1020578950010);
+    d.setUTCSeconds(11, 12);
+    d.getTime().should.equal(1020578951012);
+  })
+
   describe('#setTimezone()', function () {
 
     beforeEach(function () {
