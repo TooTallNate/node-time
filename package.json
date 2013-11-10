@@ -21,7 +21,7 @@
   "dependencies": {
       "bindings": "*"
     , "debug": "*"
-    , "nan": "~0.3.0"
+    , "nan": "~0.4.4"
   },
   "devDependencies": {
       "mocha": "*"
