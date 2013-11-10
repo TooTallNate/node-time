@@ -4,6 +4,7 @@
 
 #include <v8.h>
 #include <node.h>
+#include "nan.h"
 
 
 using namespace node;
@@ -13,7 +14,7 @@ using namespace v8;
 class Time {
   public:
   static void Init(Handle<Object> target) {
-    HandleScope scope;
+    NanScope();
 
     // time(3)
     NODE_SET_METHOD(target, "time", Time_);
@@ -28,12 +29,13 @@ class Time {
     NODE_SET_METHOD(target, "mktime", Mktime);
   }
 
-  static Handle<Value> Time_(const Arguments& args) {
-    return Integer::New(time(NULL));
+  static NAN_METHOD(Time_) {
+    NanScope();
+    NanReturnValue(Integer::New(time(NULL)));
   }
 
-  static Handle<Value> Tzset(const Arguments& args) {
-    HandleScope scope;
+  static NAN_METHOD(Tzset) {
+    NanScope();
 
     // Set up the timezone info from the current TZ environ variable
     tzset();
@@ -56,11 +58,11 @@ class Time {
     // curiosity's sake. See the "Notes" section of "man tzset"
     obj->Set(String::NewSymbol("daylight"), Number::New( daylight ));
 
-    return scope.Close(obj);
+    NanReturnValue(obj);
   }
 
-  static Handle<Value> Localtime(const Arguments& args) {
-    HandleScope scope;
+  static NAN_METHOD(Localtime) {
+    NanScope();
 
     // Construct the 'tm' struct
     time_t rawtime = static_cast<time_t>(args[0]->IntegerValue());
@@ -104,14 +106,13 @@ class Time {
       obj->Set(String::NewSymbol("invalid"), True());
     }
 
-    return scope.Close(obj);
+    NanReturnValue(obj);
   }
 
-  static Handle<Value> Mktime(const Arguments& args) {
-    HandleScope scope;
+  static NAN_METHOD(Mktime) {
+    NanScope();
     if (args.Length() < 1) {
-      Local<String> message = String::New("localtime() Object expected");
-      return ThrowException(Exception::TypeError(message));
+      return NanThrowTypeError("localtime() Object expected");
     }
 
     Local<Object> arg = args[0]->ToObject();
@@ -126,7 +127,7 @@ class Time {
     tmstr.tm_isdst = arg->Get(String::NewSymbol("isDaylightSavings"))->Int32Value();
     // tm_wday and tm_yday are ignored for input, but properly set after 'mktime' is called
 
-    return scope.Close(Number::New(static_cast<double>(mktime( &tmstr ))));
+    NanReturnValue(Number::New(static_cast<double>(mktime( &tmstr ))));
   }
 
 };
@@ -135,5 +136,5 @@ extern "C" {
   static void init (Handle<Object> target) {
     Time::Init(target);
   }
-  NODE_MODULE(time, init);
+  NODE_MODULE(time, init)
 }

@@ -2,6 +2,7 @@
   'targets': [
     {
       'target_name': 'time',
+      'include_dirs': ["<!(node -p -e \"require('path').dirname(require.resolve('nan'))\")"],
       'sources': [ 'src/time.cc' ],
       'conditions': [
         ['OS=="mac"', {
