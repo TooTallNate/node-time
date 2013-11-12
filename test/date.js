@@ -59,48 +59,48 @@ describe('Date', function () {
 
   it('should accept js1.3 extended set* arguments', function() {
 
-    var d = new time.Date(2000, 1, 2, 3, 4, 5, 6, 'America/Chicago');
-    d.setFullYear(2001, 2, 3);
-    d.getTime().should.equal(983610245006);
-    d.setFullYear(2002, 3);
-    d.getTime().should.equal(1017824645006);
-    d.setMonth(4, 5);
-    d.getTime().should.equal(1020585845006);
-    d.setHours(4, 5, 6, 7);
-    d.getTime().should.equal(1020589506007);
-    d.setHours(5, 6, 7);
-    d.getTime().should.equal(1020593167007);
-    d.setHours(6, 7);
-    d.getTime().should.equal(1020596827007);
-    d.setMinutes(8, 9, 10);
-    d.getTime().should.equal(1020596889010);
-    d.setMinutes(9, 10);
-    d.getTime().should.equal(1020596950010);
-    d.setSeconds(11, 12);
-    d.getTime().should.equal(1020596951012);
+    var d = new time.Date(2000, 1, 2, 3, 4, 5, 6, 'America/Chicago')
+    d.setFullYear(2001, 2, 3)
+    d.getTime().should.equal(983610245006)
+    d.setFullYear(2002, 3)
+    d.getTime().should.equal(1017824645006)
+    d.setMonth(4, 5)
+    d.getTime().should.equal(1020585845006)
+    d.setHours(4, 5, 6, 7)
+    d.getTime().should.equal(1020589506007)
+    d.setHours(5, 6, 7)
+    d.getTime().should.equal(1020593167007)
+    d.setHours(6, 7)
+    d.getTime().should.equal(1020596827007)
+    d.setMinutes(8, 9, 10)
+    d.getTime().should.equal(1020596889010)
+    d.setMinutes(9, 10)
+    d.getTime().should.equal(1020596950010)
+    d.setSeconds(11, 12)
+    d.getTime().should.equal(1020596951012)
   })
 
   it('should accept js1.3 extended setUTC* arguments', function() {
 
-    var d = new time.Date(2000, 1, 2, 3, 4, 5, 6, 'America/Chicago');
-    d.setUTCFullYear(2001, 2, 3);
-    d.getTime().should.equal(983610245006);
-    d.setUTCFullYear(2002, 3);
-    d.getTime().should.equal(1017824645006);
-    d.setUTCMonth(4, 5);
-    d.getTime().should.equal(1020589445006);
-    d.setUTCHours(4, 5, 6, 7);
-    d.getTime().should.equal(1020571506007);
-    d.setUTCHours(5, 6, 7);
-    d.getTime().should.equal(1020575167007);
-    d.setUTCHours(6, 7);
-    d.getTime().should.equal(1020578827007);
-    d.setUTCMinutes(8, 9, 10);
-    d.getTime().should.equal(1020578889010);
-    d.setUTCMinutes(9, 10);
-    d.getTime().should.equal(1020578950010);
-    d.setUTCSeconds(11, 12);
-    d.getTime().should.equal(1020578951012);
+    var d = new time.Date(2000, 1, 2, 3, 4, 5, 6, 'America/Chicago')
+    d.setUTCFullYear(2001, 2, 3)
+    d.getTime().should.equal(983610245006)
+    d.setUTCFullYear(2002, 3)
+    d.getTime().should.equal(1017824645006)
+    d.setUTCMonth(4, 5)
+    d.getTime().should.equal(1020589445006)
+    d.setUTCHours(4, 5, 6, 7)
+    d.getTime().should.equal(1020571506007)
+    d.setUTCHours(5, 6, 7)
+    d.getTime().should.equal(1020575167007)
+    d.setUTCHours(6, 7)
+    d.getTime().should.equal(1020578827007)
+    d.setUTCMinutes(8, 9, 10)
+    d.getTime().should.equal(1020578889010)
+    d.setUTCMinutes(9, 10)
+    d.getTime().should.equal(1020578950010)
+    d.setUTCSeconds(11, 12)
+    d.getTime().should.equal(1020578951012)
   })
 
   describe('#setTimezone()', function () {
@@ -199,39 +199,39 @@ describe('Date', function () {
         var forwards = {
             timezone: 'US/Pacific', hour: 22, minute: 47,
             year: 2013, month: 1, date: 31
-        };
+        }
         var d = new time.Date(
           forwards.year, forwards.month - 1, forwards.date,
           forwards.hour, forwards.minute, 1, 1, forwards.timezone
-        );
-        d.toString().should.equal('Thu Jan 31 2013 22:47:01 GMT-0800 (PST)');
-        d.setTimezone('UTC');
-        d.toString().should.equal('Fri Feb 01 2013 06:47:01 GMT+0000 (UTC)');
+        )
+        d.toString().should.equal('Thu Jan 31 2013 22:47:01 GMT-0800 (PST)')
+        d.setTimezone('UTC')
+        d.toString().should.equal('Fri Feb 01 2013 06:47:01 GMT+0000 (UTC)')
       })
 
       it('should calculate correctly when UTC date is day before timezone date', function () {
-        var d = new time.Date(2010, 0, 31, 19, 0, 0, 0, 'UTC');
+        var d = new time.Date(2010, 0, 31, 19, 0, 0, 0, 'UTC')
         d.toString().should.equal('Sun Jan 31 2010 19:00:00 GMT+0000 (UTC)')
 
         var backwards = {
             timezone: 'Australia/Sydney', hour: 2, minute: 47,
             year: 2013, month: 2, date: 1
-        };
+        }
 
         var d2 = new time.Date(
           backwards.year, backwards.month - 1, backwards.date,
           backwards.hour, backwards.minute, 1, 1, backwards.timezone
-        );
-        d2.toString().should.equal('Fri Feb 01 2013 02:47:01 GMT+1100 (EST)');
-        d2.setTimezone('UTC');
-        d2.toString().should.equal('Thu Jan 31 2013 15:47:01 GMT+0000 (UTC)');
+        )
+        d2.toString().should.equal('Fri Feb 01 2013 02:47:01 GMT+1100 (EST)')
+        d2.setTimezone('UTC')
+        d2.toString().should.equal('Thu Jan 31 2013 15:47:01 GMT+0000 (UTC)')
       })
 
       it('should calculate correctly on edge of months', function() {
-        var d = new time.Date("2013-02-01 01:02:03", 'US/Pacific');
-        d.toString().should.equal('Fri Feb 01 2013 01:02:03 GMT-0800 (PST)');
-        d.setTimezone('UTC');
-        d.toString().should.equal('Fri Feb 01 2013 09:02:03 GMT+0000 (UTC)');
+        var d = new time.Date("2013-02-01 01:02:03", 'US/Pacific')
+        d.toString().should.equal('Fri Feb 01 2013 01:02:03 GMT-0800 (PST)')
+        d.setTimezone('UTC')
+        d.toString().should.equal('Fri Feb 01 2013 09:02:03 GMT+0000 (UTC)')
       })
 
     })
