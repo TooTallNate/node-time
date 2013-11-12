@@ -1,5 +1,11 @@
-var should = require('should')
-  , time = require('../')
+
+/**
+ * Module dependencies.
+ */
+
+require('should')
+var assert = require('assert')
+var time = require('../')
 
 describe('Date', function () {
 
@@ -8,24 +14,24 @@ describe('Date', function () {
     it('should parse strings relative to TZ', function() {
 
       var d = new time.Date('2012-1-12 02:00 PM', 'America/New_York')
-      d.getTime().should.equal(1326394800000)
-      d.getTimezone().should.equal('America/New_York')
+      assert.equal(d.getTime(), 1326394800000)
+      assert.equal(d.getTimezone(), 'America/New_York')
 
       d = new time.Date('2012-1-12 02:00 PM', 'America/Los_Angeles')
-      d.getTime().should.equal(1326405600000)
-      d.getTimezone().should.equal('America/Los_Angeles')
+      assert.equal(d.getTime(), 1326405600000)
+      assert.equal(d.getTimezone(), 'America/Los_Angeles')
     })
 
     it('should interpret date parts relative to TZ', function() {
 
       var d = new time.Date(2012, 0, 12, 14, 'America/New_York')
-      d.getTime().should.equal(1326394800000)
-      d.getFullYear().should.equal(2012)
-      d.getTimezone().should.equal('America/New_York')
+      assert.equal(d.getTime(), 1326394800000)
+      assert.equal(d.getFullYear(), 2012)
+      assert.equal(d.getTimezone(), 'America/New_York')
 
       d = new time.Date(2012, 0, 12, 14, 'America/Los_Angeles')
-      d.getTime().should.equal(1326405600000)
-      d.getTimezone().should.equal('America/Los_Angeles')
+      assert.equal(d.getTime(), 1326405600000)
+      assert.equal(d.getTimezone(), 'America/Los_Angeles')
     })
 
     it('should accept milliseconds regardless of TZ', function() {
@@ -33,27 +39,29 @@ describe('Date', function () {
       var d1 = new time.Date(1352005200000, 'America/New_York')
       var d2 = new time.Date(1352005200000, 'America/Los_Angeles')
 
-      d1.getTime().should.equal(d2.getTime())
-      d1.getTimezone().should.equal('America/New_York')
-      d2.getTimezone().should.equal('America/Los_Angeles')
+      assert.equal(d1.getTime(), d2.getTime())
+      assert.equal(d1.getTimezone(), 'America/New_York')
+      assert.equal(d2.getTimezone(), 'America/Los_Angeles')
     })
 
 
     it('should parse strings around 2038', function() {
 
-      //Before threshold
+      // Before threshold
       var d = new time.Date('2037-12-31 11:59:59 PM', 'UTC')
-      d.getTime().should.equal(2145916799000)
-      //After threshold
+      assert.equal(d.getTime(), 2145916799000)
+
+      // After threshold
       d = new time.Date('2038-01-01 00:00:00 AM', 'UTC')
-      d.getTime().should.equal(2145916800000)
-      
-      //Before threshold
+      assert.equal(d.getTime(), 2145916800000)
+
+      // Before threshold
       d = new time.Date('2038-1-19 03:14:06 AM', 'UTC')
-      d.getTime().should.equal(2147483646000)
-      //After threshold
+      assert.equal(d.getTime(), 2147483646000)
+
+      // After threshold
       d = new time.Date('2038-1-19 03:14:07 AM', 'UTC')
-      d.getTime().should.equal(2147483647000)
+      assert.equal(d.getTime(), 2147483647000)
     })
   })
 

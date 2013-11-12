@@ -1,6 +1,11 @@
+
+/**
+ * Module depedencies.
+ */
+
+var assert = require('assert')
 var should = require('should')
-  , assert = require('assert')
-  , time = require('../')
+var time = require('../')
 
 describe('exports', function () {
 
@@ -29,7 +34,7 @@ describe('exports', function () {
   })
 
   it('should throw if in invalid object is passed into it', function () {
-    time.should.throw()
+    assert.throws(time)
   })
 
   it('should have a "currentTimezone" property', function () {
@@ -44,9 +49,9 @@ describe('exports', function () {
       var invalid = new Date(NaN)
       var local = time.localtime(invalid.getTime())
       assert.deepEqual({ invalid: true }, local)
-    });
+    })
 
-  });
+  })
 
   describe('Date', function () {
 
@@ -59,20 +64,18 @@ describe('exports', function () {
     })
 
     it('should return a real "Date" instance', function () {
-      var d = new time.Date
+      var d = new time.Date()
       Object.prototype.toString.call(d).should.equal('[object Date]')
     })
 
     it('should pass `time.Date` instanceof', function () {
-      var d = new time.Date
-        , test = d instanceof time.Date
-      test.should.be.true
+      var d = new time.Date()
+      assert(d instanceof time.Date)
     })
 
     it('should not pass global instanceof', function () {
-      var d = new time.Date
-        , test = d instanceof Date
-      test.should.be.false
+      var d = new time.Date()
+      assert.equal(d instanceof Date, false)
     })
 
     it('should already have the node-time extensions', function () {
