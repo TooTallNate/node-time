@@ -1,7 +1,14 @@
 {
   "name": "time",
   "description": "\"time.h\" bindings for NodeJS",
-  "keywords": ["date", "time", "time.h", "timezone", "setTimezone", "getTimezone"],
+  "keywords": [
+    "date",
+    "time",
+    "time.h",
+    "timezone",
+    "setTimezone",
+    "getTimezone"
+  ],
   "version": "0.10.0",
   "repository": {
     "type": "git",
@@ -9,7 +16,10 @@
   },
   "author": "Nathan Rajlich <nathan@tootallnate.net> (http://tootallnate.net)",
   "contributors": [
-    { "name": "Diogo Resende", "email": "dresende@thinkdigital.pt" }
+    {
+      "name": "Diogo Resende",
+      "email": "dresende@thinkdigital.pt"
+    }
   ],
   "main": "./index.js",
   "scripts": {
@@ -19,9 +29,9 @@
     "node": "*"
   },
   "dependencies": {
-      "bindings": "*"
-    , "debug": "*"
-    , "nan": "~0.5.1"
+    "bindings": "*",
+    "debug": "*",
+    "nan": "~0.5.1"
   },
   "devDependencies": {
       "mocha": "*"
