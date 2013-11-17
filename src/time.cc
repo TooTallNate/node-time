@@ -47,16 +47,16 @@ class Time {
     int tznameLength = 2;
     Local<Array> tznameArray = Array::New( tznameLength );
     for (int i=0; i < tznameLength; i++) {
-      tznameArray->Set(Number::New(i), String::NewSymbol( tzname[i] ));
+      tznameArray->Set(Number::New(i), NanSymbol( tzname[i] ));
     }
-    obj->Set(String::NewSymbol("tzname"), tznameArray);
+    obj->Set(NanSymbol("tzname"), tznameArray);
 
     // The 'timezone' long is the "seconds West of UTC"
-    obj->Set(String::NewSymbol("timezone"), Number::New( timezone ));
+    obj->Set(NanSymbol("timezone"), Number::New( timezone ));
 
     // The 'daylight' int is obselete actually, but I'll include it here for
     // curiosity's sake. See the "Notes" section of "man tzset"
-    obj->Set(String::NewSymbol("daylight"), Number::New( daylight ));
+    obj->Set(NanSymbol("daylight"), Number::New( daylight ));
 
     NanReturnValue(obj);
   }
@@ -72,20 +72,20 @@ class Time {
     Local<Object> obj = Object::New();
 
     if (timeinfo) {
-      obj->Set(String::NewSymbol("seconds"), Integer::New(timeinfo->tm_sec) );
-      obj->Set(String::NewSymbol("minutes"), Integer::New(timeinfo->tm_min) );
-      obj->Set(String::NewSymbol("hours"), Integer::New(timeinfo->tm_hour) );
-      obj->Set(String::NewSymbol("dayOfMonth"), Integer::New(timeinfo->tm_mday) );
-      obj->Set(String::NewSymbol("month"), Integer::New(timeinfo->tm_mon) );
-      obj->Set(String::NewSymbol("year"), Integer::New(timeinfo->tm_year) );
-      obj->Set(String::NewSymbol("dayOfWeek"), Integer::New(timeinfo->tm_wday) );
-      obj->Set(String::NewSymbol("dayOfYear"), Integer::New(timeinfo->tm_yday) );
-      obj->Set(String::NewSymbol("isDaylightSavings"), Boolean::New(timeinfo->tm_isdst > 0) );
+      obj->Set(NanSymbol("seconds"), Integer::New(timeinfo->tm_sec) );
+      obj->Set(NanSymbol("minutes"), Integer::New(timeinfo->tm_min) );
+      obj->Set(NanSymbol("hours"), Integer::New(timeinfo->tm_hour) );
+      obj->Set(NanSymbol("dayOfMonth"), Integer::New(timeinfo->tm_mday) );
+      obj->Set(NanSymbol("month"), Integer::New(timeinfo->tm_mon) );
+      obj->Set(NanSymbol("year"), Integer::New(timeinfo->tm_year) );
+      obj->Set(NanSymbol("dayOfWeek"), Integer::New(timeinfo->tm_wday) );
+      obj->Set(NanSymbol("dayOfYear"), Integer::New(timeinfo->tm_yday) );
+      obj->Set(NanSymbol("isDaylightSavings"), Boolean::New(timeinfo->tm_isdst > 0) );
 
 #if defined HAVE_TM_GMTOFF
       // Only available with glibc's "tm" struct. Most Linuxes, Mac OS X...
-      obj->Set(String::NewSymbol("gmtOffset"), Integer::New(timeinfo->tm_gmtoff) );
-      obj->Set(String::NewSymbol("timezone"), String::NewSymbol(timeinfo->tm_zone) );
+      obj->Set(NanSymbol("gmtOffset"), Integer::New(timeinfo->tm_gmtoff) );
+      obj->Set(NanSymbol("timezone"), NanSymbol(timeinfo->tm_zone) );
 
 #elif defined HAVE_TIMEZONE
       // Compatibility for Cygwin, Solaris, probably others...
@@ -99,11 +99,11 @@ class Time {
       } else {
         scd = -timezone;
       }
-      obj->Set(String::NewSymbol("gmtOffset"), Integer::New(scd));
-      obj->Set(String::NewSymbol("timezone"), String::NewSymbol(tzname[timeinfo->tm_isdst]));
+      obj->Set(NanSymbol("gmtOffset"), Integer::New(scd));
+      obj->Set(NanSymbol("timezone"), NanSymbol(tzname[timeinfo->tm_isdst]));
 #endif // HAVE_TM_GMTOFF
     } else {
-      obj->Set(String::NewSymbol("invalid"), True());
+      obj->Set(NanSymbol("invalid"), True());
     }
 
     NanReturnValue(obj);
@@ -118,13 +118,13 @@ class Time {
     Local<Object> arg = args[0]->ToObject();
 
     struct tm tmstr;
-    tmstr.tm_sec   = arg->Get(String::NewSymbol("seconds"))->Int32Value();
-    tmstr.tm_min   = arg->Get(String::NewSymbol("minutes"))->Int32Value();
-    tmstr.tm_hour  = arg->Get(String::NewSymbol("hours"))->Int32Value();
-    tmstr.tm_mday  = arg->Get(String::NewSymbol("dayOfMonth"))->Int32Value();
-    tmstr.tm_mon   = arg->Get(String::NewSymbol("month"))->Int32Value();
-    tmstr.tm_year  = arg->Get(String::NewSymbol("year"))->Int32Value();
-    tmstr.tm_isdst = arg->Get(String::NewSymbol("isDaylightSavings"))->Int32Value();
+    tmstr.tm_sec   = arg->Get(NanSymbol("seconds"))->Int32Value();
+    tmstr.tm_min   = arg->Get(NanSymbol("minutes"))->Int32Value();
+    tmstr.tm_hour  = arg->Get(NanSymbol("hours"))->Int32Value();
+    tmstr.tm_mday  = arg->Get(NanSymbol("dayOfMonth"))->Int32Value();
+    tmstr.tm_mon   = arg->Get(NanSymbol("month"))->Int32Value();
+    tmstr.tm_year  = arg->Get(NanSymbol("year"))->Int32Value();
+    tmstr.tm_isdst = arg->Get(NanSymbol("isDaylightSavings"))->Int32Value();
     // tm_wday and tm_yday are ignored for input, but properly set after 'mktime' is called
 
     NanReturnValue(Number::New(static_cast<double>(mktime( &tmstr ))));
