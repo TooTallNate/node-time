@@ -47,7 +47,7 @@ class Time {
     int tznameLength = 2;
     Local<Array> tznameArray = Array::New( tznameLength );
     for (int i=0; i < tznameLength; i++) {
-      tznameArray->Set(Number::New(i), NanSymbol( tzname[i] ));
+      tznameArray->Set(i, NanSymbol( tzname[i] ));
     }
     obj->Set(NanSymbol("tzname"), tznameArray);
 
