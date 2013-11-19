@@ -4,33 +4,31 @@
  */
 
 var assert = require('assert')
-var should = require('should')
 var time = require('../')
 
 describe('exports', function () {
 
   it('should be a function', function () {
-    time.should.be.a('function')
+    assert.equal(typeof time, 'function')
   })
 
   it('should return itself when invoked', function () {
     var dummy = function () {}
-    time(dummy).should.equal(time)
+    assert.equal(time(dummy), time)
   })
 
-  it('should add node-time extensions to the passed in function\'s prototype'
-  , function () {
+  it('should add node-time extensions to the passed in function\'s prototype',
+  function () {
     var dummy = function () {}
-      , proto = dummy.prototype
+    var proto = dummy.prototype
 
-    proto.should.not.have.property('setTimezone')
-    proto.should.not.have.property('getTimezone')
-    proto.should.not.have.property('getTimezoneAbbr')
+    assert.notEqual('function', typeof proto.setTimezone);
+    assert.notEqual('function', typeof proto.getTimezone);
+    assert.notEqual('function', typeof proto.getTimezoneAbbr);
     time(dummy)
-    proto.should.have.property('setTimezone')
-    proto.should.have.property('getTimezone')
-    proto.should.have.property('getTimezoneAbbr')
-
+    assert.equal('function', typeof proto.setTimezone);
+    assert.equal('function', typeof proto.getTimezone);
+    assert.equal('function', typeof proto.getTimezoneAbbr);
   })
 
   it('should throw if in invalid object is passed into it', function () {
@@ -38,7 +36,7 @@ describe('exports', function () {
   })
 
   it('should have a "currentTimezone" property', function () {
-    time.should.have.property('currentTimezone')
+    assert.equal('string', typeof time.currentTimezone);
     assert(time.currentTimezone)
   })
 
@@ -56,16 +54,16 @@ describe('exports', function () {
   describe('Date', function () {
 
     it('should have a "Date" property', function () {
-      time.should.have.property('Date')
+      assert.equal('function', typeof time.Date);
     })
 
     it('should *not* be the global "Date" object', function () {
-      time.Date.should.not.equal(Date)
+      assert.notStrictEqual(time.Date, Date);
     })
 
     it('should return a real "Date" instance', function () {
       var d = new time.Date()
-      Object.prototype.toString.call(d).should.equal('[object Date]')
+      assert.equal(Object.prototype.toString.call(d), '[object Date]')
     })
 
     it('should pass `time.Date` instanceof', function () {
@@ -79,15 +77,15 @@ describe('exports', function () {
     })
 
     it('should already have the node-time extensions', function () {
-      should.exist(time.Date.prototype.setTimezone)
-      should.exist(time.Date.prototype.getTimezone)
-      should.exist(time.Date.prototype.getTimezoneAbbr)
+      assert.equal('function', typeof time.Date.prototype.setTimezone)
+      assert.equal('function', typeof time.Date.prototype.getTimezone)
+      assert.equal('function', typeof time.Date.prototype.getTimezoneAbbr)
     })
 
     it('should have all the regular Date properties', function () {
-      time.Date.should.have.property('now')
-      time.Date.should.have.property('parse')
-      time.Date.should.have.property('UTC')
+      assert.equal('function', typeof time.Date.now)
+      assert.equal('function', typeof time.Date.parse)
+      assert.equal('function', typeof time.Date.UTC)
     })
 
   })
