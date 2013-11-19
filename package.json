@@ -31,7 +31,7 @@
   "dependencies": {
     "bindings": "*",
     "debug": "*",
-    "nan": "~0.5.1"
+    "nan": "0"
   },
   "devDependencies": {
       "mocha": "*"
