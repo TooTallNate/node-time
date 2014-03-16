@@ -472,8 +472,11 @@ function setTimezone (timezone, relative) {
   }
 
   this.toTimeString = function toTimeString() {
-    var offset = zoneInfo.gmtOffset / 60 / 60;
-    return this.toLocaleTimeString() + ' GMT' + (offset >= 0 ? '+' : '-') + pad(Math.abs(offset * 100), 4)
+    var offset = Math.abs(zoneInfo.gmtOffset / 60); // total minutes
+    // split into HHMM:
+    var hours = pad(Math.floor(offset / 60), 2);
+    var minutes = pad(offset % 60, 2);
+    return this.toLocaleTimeString() + ' GMT' + (zoneInfo.gmtOffset >= 0 ? '+' : '-') + hours + minutes
       + ' (' + tz.tzname[zoneInfo.isDaylightSavings ? 1 : 0] + ')';
   }
 

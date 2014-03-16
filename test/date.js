@@ -241,6 +241,14 @@ describe('Date', function () {
         assert.equal(d.toString(), 'Fri Feb 01 2013 09:02:03 GMT+0000 (UTC)')
       })
 
+      it('should produce the right time string for half-hour time offsets', function() {
+        var d = new time.Date("2014-01-17T13:14:15-0330")
+        d.setTimezone('America/St_Johns')
+        assert.equal(d.toString(), 'Fri Jan 17 2014 13:14:15 GMT-0330 (NST)')
+        d.setTimezone('UTC')
+        assert.equal(d.toString(), 'Fri Jan 17 2014 16:44:15 GMT+0000 (UTC)')
+      })
+
     })
 
   })
