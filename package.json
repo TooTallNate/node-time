@@ -25,9 +25,6 @@
   "scripts": {
     "test": "mocha --reporter spec"
   },
-  "engines": {
-    "node": "*"
-  },
   "dependencies": {
     "bindings": "*",
     "debug": "*",
