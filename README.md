@@ -1,6 +1,6 @@
 node-time
 =========
-### "[time.h][]" bindings for [NodeJS][Node].
+### "[time.h][]" bindings for [Node.js][Node].
 [![Build Status](https://travis-ci.org/TooTallNate/node-time.png?branch=master)](https://travis-ci.org/TooTallNate/node-time)
 
 
