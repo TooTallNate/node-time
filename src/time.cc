@@ -31,7 +31,7 @@ class Time {
 
   static NAN_METHOD(Time_) {
     NanEscapableScope();
-    NanReturnValue(NanNew<v8::Integer>(time(NULL)));
+    NanReturnValue(NanNew<v8::Number>(time(NULL)));
   }
 
   static NAN_METHOD(Tzset) {
@@ -84,7 +84,7 @@ class Time {
 
 #if defined HAVE_TM_GMTOFF
       // Only available with glibc's "tm" struct. Most Linuxes, Mac OS X...
-      obj->Set(NanNew<v8::String>("gmtOffset"), NanNew<v8::Integer>(timeinfo->tm_gmtoff) );
+      obj->Set(NanNew<v8::String>("gmtOffset"), NanNew<v8::Number>(timeinfo->tm_gmtoff) );
       obj->Set(NanNew<v8::String>("timezone"), NanNew<v8::String>(timeinfo->tm_zone) );
 
 #elif defined HAVE_TIMEZONE
