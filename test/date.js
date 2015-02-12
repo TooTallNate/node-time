@@ -229,7 +229,7 @@ describe('Date', function () {
           backwards.year, backwards.month - 1, backwards.date,
           backwards.hour, backwards.minute, 1, 1, backwards.timezone
         )
-        assert.equal(d2.toString(), 'Fri Feb 01 2013 02:47:01 GMT+1100 (EST)')
+        assert.equal(d2.toString(), 'Fri Feb 01 2013 02:47:01 GMT+1100 (AEDT)')
         d2.setTimezone('UTC')
         assert.equal(d2.toString(), 'Thu Jan 31 2013 15:47:01 GMT+0000 (UTC)')
       })
