@@ -1,4 +1,12 @@
 
+0.11.1 / 2015-02-11
+==================
+
+  * travis: test v0.12, don't test v0.6 and v0.11
+  * test: fix failing test (#67, @hmalphettes)
+  * package: upgrade to the latest "nan" (#66, @hmalphettes)
+  * README: use svg for Travis badge
+
 0.11.0 / 2014-06-02
 ==================
 
