@@ -6,6 +6,13 @@
 #include <node.h>
 #include "nan.h"
 
+#ifdef WIN32
+#define tzset     _tzset
+#define tzname    _tzname
+#define timezone  _timezone
+#define daylight  _daylight
+#endif
+
 
 using namespace node;
 using namespace v8;
