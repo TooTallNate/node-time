@@ -39,8 +39,18 @@ exports.currentTimezone = process.env.TZ;
  */
 
 exports.time = bindings.time;
-exports.localtime = bindings.localtime;
 exports.mktime = bindings.mktime;
+
+/**
+ * Check if the first argument is NaN and just return in case it is.
+ */
+exports.localtime = function localtime() {
+  if ((arguments[0] !== undefined) && isNaN(arguments[0])) {
+    return { invalid: true };
+  } else {
+    return bindings.localtime.apply(null, arguments);
+  }
+};
 
 /**
  * A "hack" of sorts to force getting our own Date instance.
