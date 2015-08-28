@@ -1,4 +1,11 @@
 
+0.11.4 / 2015-08-28
+==================
+
+  * package: allow any "nan" v2
+  * package: looser "bindings" version
+  * package: upgrade to nan v2 (#77, @santigimeno)
+
 0.11.3 / 2015-05-18
 ==================
 
