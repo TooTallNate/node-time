@@ -27,9 +27,9 @@
     "test": "mocha --reporter spec"
   },
   "dependencies": {
-    "bindings": "~1.2.0",
-    "debug": "2",
-    "nan": "2"
+    "bindings": "^1.2.0",
+    "debug": "^2.2.0",
+    "nan": "^2.1.0"
   },
   "devDependencies": {
     "mocha": "*"
