@@ -46,7 +46,8 @@ class Time {
 	char szTzName[128];
 
 	for (int i = 0; i < tznameLength; i++) {
-		_get_tzname(nullptr, szTzName, 128, i);
+		size_t strLength;
+		_get_tzname(&strLength, szTzName, 128, i);
 		Nan::Set(tznameArray, i, Nan::New<v8::String>(szTzName).ToLocalChecked());
 	}
 
