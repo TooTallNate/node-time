@@ -42,6 +42,27 @@ class Time {
     // The 'tzname' char * [] gets put into a JS Array
     int tznameLength = 2;
     Local<Array> tznameArray = Nan::New<v8::Array>( tznameLength );
+#if _MSC_VER >= 1900
+	char szTzName[128];
+
+	for (int i = 0; i < tznameLength; i++) {
+		_get_tzname(nullptr, szTzName, 128, i);
+		Nan::Set(tznameArray, i, Nan::New<v8::String>(szTzName).ToLocalChecked());
+	}
+
+	Nan::Set(obj, Nan::New("tzname").ToLocalChecked(), tznameArray);
+
+	// The 'timezone' long is the "seconds West of UTC"
+	long timezone;
+	_get_timezone(&timezone);
+	Nan::Set(obj, Nan::New("timezone").ToLocalChecked(), Nan::New<v8::Number>(timezone));
+
+	// The 'daylight' int is obselete actually, but I'll include it here for
+	// curiosity's sake. See the "Notes" section of "man tzset"
+	int daylight;
+	_get_daylight(&daylight);
+	Nan::Set(obj, Nan::New("daylight").ToLocalChecked(), Nan::New<v8::Number>(daylight));
+#else
     for (int i=0; i < tznameLength; i++) {
       Nan::Set(tznameArray, i, Nan::New<v8::String>(tzname[i]).ToLocalChecked());
     }
@@ -54,7 +75,7 @@ class Time {
     // The 'daylight' int is obselete actually, but I'll include it here for
     // curiosity's sake. See the "Notes" section of "man tzset"
     Nan::Set(obj, Nan::New("daylight").ToLocalChecked(), Nan::New<v8::Number>( daylight ));
-
+#endif
     info.GetReturnValue().Set(scope.Escape(obj));
   }
 
