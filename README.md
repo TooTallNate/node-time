@@ -9,6 +9,15 @@ It also offers an extended native `Date` object with `getTimezone()`
 and `setTimezone()` functions, which aren't normally part of JavaScript.
 
 
+Prerequsites
+------------
+
+On RHEL based systems (eg. AWS EC2), `node-time` requires `gcc-c++` and `make`. Run:
+
+``` bash
+$ sudo yum install gcc-c++ make
+```
+
 Installation
 ------------
 
