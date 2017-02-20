@@ -2,6 +2,7 @@ node-time
 =========
 ### "[time.h][]" bindings for [Node.js][Node].
 [![Build Status](https://travis-ci.org/TooTallNate/node-time.svg?branch=master)](https://travis-ci.org/TooTallNate/node-time)
+[![Build Status](https://ci.appveyor.com/api/projects/status/weml61hm3ebh5mnt/branch/master?svg=true)](https://ci.appveyor.com/project/TooTallNate/node-time/branch/master)
 
 
 This module offers simple bindings for the C [time.h][] APIs.
