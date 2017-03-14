@@ -127,6 +127,17 @@ if (!exports.currentTimezone) {
   }
 }
 
+if (!exports.currentTimezone) {
+  debug('"currentTimezone" still not set. Checking "/etc/TZ"');
+  try {
+    var zone = fs.readFileSync('/etc/TZ', 'utf8').trim();
+    exports.currentTimezone = process.env.TZ = zone;
+    debug('resolved initial timezone:', zone);
+  } catch (e) {
+    debug(e);
+  }
+}
+
 /**
  * The user-facing 'tzset' function is a thin wrapper around the native binding to
  * 'tzset()'. This function accepts a timezone String to set the process' timezone
