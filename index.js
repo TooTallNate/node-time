@@ -157,6 +157,10 @@ function tzset (tz) {
   debug('set the current timezone to:', usedTz);
   if (!rtn.tzname[1] && rtn.timezone === 0) {
     debug('got bad zoneinfo object:', rtn);
+    if (tz !== exports.currentTimezone) {
+      // restore original timezone in case of error
+      tzset(exports.currentTimezone);
+    }
     var err = new Error("Unknown Timezone: '" + usedTz + "'");
     for (var i in rtn) {
       err[i] = rtn[i];
