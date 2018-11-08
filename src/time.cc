@@ -3,10 +3,7 @@
 #include <time.h>
 
 #include "napi.h"
-#include "uv.h"
-#include "math.h"
-
-using namespace Napi;
+#include <cmath>
 
 class Time {
   public:
