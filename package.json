@@ -27,7 +27,7 @@
     "test": "mocha --reporter spec"
   },
   "dependencies": {
-    "bindings": "^1.2.0",
+    "bindings": "TooTallNate/node-bindings#webpack",
     "debug": "^2.2.0",
     "nan": "^2.2.0"
   },
