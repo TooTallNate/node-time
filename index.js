@@ -5,12 +5,15 @@
 var debug = require('debug')('time')
   , fs = require('fs')
   , path = require('path')
-  , bindings = require('bindings')('time.node')
+  // , bindings = require('bindings')('time')
   , MILLIS_PER_SECOND = 1000
   , DAYS_OF_WEEK = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
   , MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
   , TZ_BLACKLIST = [ 'SystemV', 'Etc' ];
 
+var time =  require('bindings')('time');
+// ok, it has no state
+var bindings = new time.Time();
 /**
  * Extends a "Date" constructor with node-time's extensions.
  * By default, `time.Date` is extended with this function.
@@ -38,9 +41,18 @@ exports.currentTimezone = process.env.TZ;
  * Export the raw functions from the bindings.
  */
 
-exports.time = bindings.time;
-exports.localtime = bindings.localtime;
-exports.mktime = bindings.mktime;
+exports.time = () => {
+  debug("local time call in js to time")
+  return bindings.time();
+}
+exports.localtime = (t) => {
+  debug('localtime binding in js')
+  return bindings.localtime(t);
+}
+exports.mktime = (o) => {
+  debug('local mktime binding in js calling with %s', JSON.stringify(o,null, 2))
+  return bindings.mktime(o);
+}
 
 /**
  * A "hack" of sorts to force getting our own Date instance.
@@ -263,7 +275,8 @@ function setTimezone (timezone, relative) {
   }
 
   // Get the zoneinfo for this Date instance's time value
-  var zoneInfo = exports.localtime(this.getTime() / 1000);
+  var myTime = this.getTime() / 1000;
+  var zoneInfo = exports.localtime(myTime);
 
   // Change the timezone back if we changed it originally
   if (oldTz != timezone) {
@@ -521,6 +534,7 @@ function setTimezone (timezone, relative) {
   }
   // 'mktime' calls 'reset' implicitly through 'setTime()'
   function mktime () {
+    debug("mktime js side");
     var oldTz = process.env.TZ;
     exports.tzset(this.getTimezone());
     zoneInfo.isDaylightSavings = -1; // Auto-detect the timezone
@@ -555,6 +569,7 @@ function getTimezoneAbbr () {
 // argument, in order to specify the initial timezone the Date instance should
 // be created with.
 function Date (year, month, day, hour, minute, second, millisecond, timezone) {
+  debug("Date JS side")
   if (!(this instanceof Date)) {
     return new Date(year, month, day, hour, minute, second, millisecond, timezone).toString();
   }

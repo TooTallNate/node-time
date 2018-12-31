@@ -55,6 +55,8 @@ class Time {
 
 	// The 'timezone' long is the "seconds West of UTC"
 	long timezone;
+	// MS C++ specific
+	// https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/get-timezone?view=vs-2017
 	_get_timezone(&timezone);
 	Nan::Set(obj, Nan::New("timezone").ToLocalChecked(), Nan::New<v8::Number>(timezone));
 
