@@ -62,6 +62,7 @@ Napi::Value Time::tzset(const Napi::CallbackInfo &info) {
         // tzname is from environment variable TZ
         // http://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html
         tznameArray[i] = Napi::String::New(info.Env(), tzname[i]);
+        std::cout << "timezone array[" << i << "] = " << tzname[i] << std::endl;
     }
 
     obj.Set("tzname", tznameArray);
