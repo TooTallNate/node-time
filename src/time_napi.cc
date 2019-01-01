@@ -8,7 +8,6 @@ Napi::Object Time::Init(Napi::Env env, Napi::Object exports) {
     Napi::HandleScope scope(env);
 
     Napi::Function func = DefineClass(env, "Time", {
-            InstanceMethod("time", &Time::time),
             InstanceMethod("tzset", &Time::tzset),
             InstanceMethod("localtime", &Time::localtime),
             InstanceMethod("mktime", &Time::mktime),
@@ -25,11 +24,6 @@ Time::Time(const Napi::CallbackInfo &info) : Napi::ObjectWrap<Time>(info) {
     Napi::Env env = info.Env();
     Napi::HandleScope scope(env);
 }
-
-Napi::Value Time::time(const Napi::CallbackInfo &info) {
-    return Napi::String::New(info.Env(), "hello world 1");
-}
-
 
 Napi::Value Time::tzset(const Napi::CallbackInfo &info) {
     ::tzset();

@@ -11,7 +11,6 @@ public:
 private:
     static Napi::FunctionReference constructor;
 
-    Napi::Value time(const Napi::CallbackInfo& info);
     Napi::Value tzset(const Napi::CallbackInfo& info);
     Napi::Value localtime(const Napi::CallbackInfo& info);
     Napi::Value mktime(const Napi::CallbackInfo& info);
