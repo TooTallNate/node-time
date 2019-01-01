@@ -150,6 +150,7 @@ if (!exports.currentTimezone) {
   }
 }
 
+
 /**
  * The user-facing 'tzset' function is a thin wrapper around the native binding to
  * 'tzset()'. This function accepts a timezone String to set the process' timezone
@@ -328,7 +329,8 @@ function setTimezone (timezone, relative) {
   // Returns the timezone offset from GMT the Date instance currently is in,
   // in minutes. Also, left of GMT is positive, right of GMT is negative.
   this.getTimezoneOffset = function getTimezoneOffset() {
-    return -zoneInfo.gmtOffset / 60;
+    var value = -zoneInfo.gmtOffset / 60;
+    return value;
   }
   // NON-STANDARD: Returns the abbreviation (e.g. EST, EDT) for the specified time zone.
   this.getTimezoneAbbr = function getTimezoneAbbr() {
@@ -519,10 +521,15 @@ function setTimezone (timezone, relative) {
   this.toLocaleString = this.toString;
 
   if (relative) {
+    debug("setAllDateFields");
     this.setAllDateFields(y,mo,d)
+    debug("setHours")
     this.setHours(h)
+    debug("setMinutes")
     this.setMinutes(m)
+    debug("setSeconds")
     this.setSeconds(s)
+    debug("setMilliseconds")
     this.setMilliseconds(ms)
     ms = s = m = h = d = mo = y = null
   }

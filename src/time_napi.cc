@@ -41,7 +41,7 @@ Napi::Value Time::tzset(const Napi::CallbackInfo &info) {
     // Nan::EscapableHandleScope scope;
     // Napi::EscapableHandleScope scope = Napi::EscapableHandleScope::New(info.Env());
     // Set up the timezone info from the current TZ environ variable
-    // tzset(); this really looks odd calling it twice ?
+    ::tzset();
 
     // Set up a return object that will hold the results of the timezone change
     // Local<Object> obj = Nan::New<v8::Object>();
@@ -53,7 +53,7 @@ Napi::Value Time::tzset(const Napi::CallbackInfo &info) {
     Napi::Array tznameArray = Napi::Array::New(info.Env(), tznameLength);
     for (size_t i = 0; i < tznameLength; i++) {
         // Nan::Set(tznameArray, i, Nan::New<v8::String>(tzname[i]).ToLocalChecked());
-        std::cout << "time zone name from ? " << i << " " << tzname[i] << std::endl;
+        // std::cout << "time zone name from ? " << i << " " << tzname[i] << std::endl;
         // tzname is from environment variable TZ
         // http://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html
         tznameArray[i] = Napi::String::New(info.Env(), tzname[i]);
@@ -79,9 +79,7 @@ Napi::Value Time::tzset(const Napi::CallbackInfo &info) {
 }
 
 Napi::Value Time::localtime(const Napi::CallbackInfo &info) {
-    std::cout << "================= native localtime ========================"
-    << info.Length()
-    << std::endl;
+    std::cout << "================= native localtime ========================" << std::endl;
     Napi::Env env = info.Env();
     // Nan::EscapableHandleScope scope;
 
@@ -115,7 +113,40 @@ Napi::Value Time::localtime(const Napi::CallbackInfo &info) {
         obj.Set("dayOfWeek", timeinfo->tm_wday);
         obj.Set("dayOfYear", timeinfo->tm_yday);
         obj.Set("isDaylightSavings", (timeinfo->tm_isdst > 0));
+        obj.Set("xyz", "xyz");
+#if defined HAVE_TM_GMTOFF
+      // Only available with glibc's "tm" struct. Most Linuxes, Mac OS X...
+      // Nan::Set(obj, Nan::New("gmtOffset").ToLocalChecked(), Nan::New<v8::Number>(timeinfo->tm_gmtoff) );
+      // Nan::Set(obj, Nan::New("timezone").ToLocalChecked(), Nan::New(timeinfo->tm_zone).ToLocalChecked() );
+    std::cout << "have tm" << std::endl;
+    obj.Set("gmtOffset", timeinfo->tm_gmtoff);
+    obj.Set("timezone", timeinfo->tm_zone);
+    obj.Set("monkey1", 1);
+#elif defined HAVE_TIMEZONE
+    std::cout << "have not tm" << std::endl;
+      // Compatibility for Cygwin, Solaris, probably others...
+      long scd;
+      if (timeinfo->tm_isdst > 0) {
+  #ifdef HAVE_ALTZONE
+        scd = -altzone;
+  #else
+        scd = -timezone + 3600;
+  #endif // HAVE_ALTZONE
+      } else {
+        scd = -timezone;
+      }
+      // Nan::Set(obj, Nan::New("gmtOffset").ToLocalChecked(), Nan::New<v8::Integer>(scd));
+      // Nan::Set(obj, Nan::New("timezone").ToLocalChecked(), Nan::New<v8::String>(tzname[timeinfo->tm_isdst]));
+      obj.Set("gmtOffset", scd);
+      obj.Set('timezone', tzname[timeinfo->tm_isdst]);
+      // obj.Set("monkey2", 2);
+#endif // HAVE_TM_GMTOFF
+    } else {
+      // Nan::Set(obj, Nan::New("invalid").ToLocalChecked(), Nan::New<v8::Boolean>(true));
+      std::cout << "have error in tm" << std::endl;
+      obj.Set("invalid", true);
     }
+
     return obj;
 }
 
@@ -126,14 +157,11 @@ Napi::Value Time::mktime(const Napi::CallbackInfo &info) {
          Napi::TypeError::New(env, "Wrong number of arguments").ThrowAsJavaScriptException();
             return env.Null();
     }
-    std::cout << "================= args count checked ========================" << std::endl;
     if (!info[0].IsObject() ) {
         Napi::TypeError::New(env, "Wrong arguments").ThrowAsJavaScriptException();
         return env.Null();
     }
-    std::cout << "================= arg value is an object ========================" << std::endl;
     Napi::Object obj = info[0].As<Napi::Object>();
-    std::cout << "================= tm struct manipulate ========================" << std::endl;
     struct tm tmstr;
     tmstr.tm_sec = obj.Get("seconds").As<Napi::Number>().Uint32Value();
     tmstr.tm_min = obj.Get("minutes").As<Napi::Number>().Uint32Value();
@@ -142,10 +170,7 @@ Napi::Value Time::mktime(const Napi::CallbackInfo &info) {
     tmstr.tm_mon = obj.Get("month").As<Napi::Number>().Uint32Value();
     tmstr.tm_year = obj.Get("year").As<Napi::Number>().Uint32Value();
     tmstr.tm_isdst = obj.Get("isDaylightSavings").As<Napi::Number>().Uint32Value();
-    std::cout << "================= tm struct manipulated ========================" << std::endl;
-    std::cout << "tm_mday=" << tmstr.tm_mday << std::endl;
     double myMakeTmVal = ::mktime(&tmstr);
-    std::cout << "myMakeTmVal = " << myMakeTmVal << std::endl;
     Napi::Number myMakeTm = Napi::Number::New(env, myMakeTmVal);
     return myMakeTm;
 }
