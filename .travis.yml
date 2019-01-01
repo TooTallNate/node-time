@@ -19,4 +19,4 @@ install:
 script:
   - node --version
   - npm --version
-  - if [[ "$TRAVIS_OS_NAME" != "windows" ]]; npm test ; fi
+  - if [[ "$TRAVIS_OS_NAME" != "windows" ]]; then npm test ; fi
