@@ -104,7 +104,6 @@ Napi::Value Time::localtime(const Napi::CallbackInfo &info) {
         obj.Set("dayOfWeek", timeinfo->tm_wday);
         obj.Set("dayOfYear", timeinfo->tm_yday);
         obj.Set("isDaylightSavings", (timeinfo->tm_isdst > 0));
-        obj.Set("xyz", "xyz");
 #if defined HAVE_TM_GMTOFF
         // Only available with glibc's "tm" struct. Most Linuxes, Mac OS X...
         obj.Set("gmtOffset", timeinfo->tm_gmtoff);
