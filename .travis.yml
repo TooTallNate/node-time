@@ -1,12 +1,14 @@
 os:
   - linux
   - windows
+  - osx
 
 sudo: false
 
 language: node_js
 
 node_js:
+  - "6.14.3"
   - "10"
 
 install:
