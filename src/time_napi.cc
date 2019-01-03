@@ -30,17 +30,38 @@ Napi::Value Time::tzset(const Napi::CallbackInfo &info) {
 
     // Set up a return object that will hold the results of the timezone change
     Napi::Object obj = Napi::Object::New(info.Env());
-
     // The 'tzname' char * [] gets put into a JS Array
     size_t tznameLength = 2;
     Napi::Array tznameArray = Napi::Array::New(info.Env(), tznameLength);
+#if _MSC_VER >= 1900
+    char szTzName[128];
+
+	for (int i = 0; i < tznameLength; i++) {
+		size_t strLength;
+		_get_tzname(&strLength, szTzName, 128, i);
+		tznameArray[i] = Napi::String::New(info.Env(), szTzName);
+	}
+
+    obj.Set("tzname", tznameArray);
+	// The 'timezone' long is the "seconds West of UTC"
+	long timezone;
+	// MS C++ specific
+	// https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/get-timezone?view=vs-2017
+	_get_timezone(&timezone);
+	obj.Set("timezone", timezone);
+
+	// The 'daylight' int is obselete actually, but I'll include it here for
+	// curiosity's sake. See the "Notes" section of "man tzset"
+	int daylight;
+	_get_daylight(&daylight);
+	obj.Set("daylight", daylight);
+#else
     for (size_t i = 0; i < tznameLength; i++) {
         // tzname is from environment variable TZ
         // http://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html
         tznameArray[i] = Napi::String::New(info.Env(), tzname[i]);
     }
 
-    // Nan::Set(obj, Nan::New("tzname").ToLocalChecked(), tznameArray);
     obj.Set("tzname", tznameArray);
 
     // The 'timezone' long is the "seconds West of UTC"
@@ -49,9 +70,7 @@ Napi::Value Time::tzset(const Napi::CallbackInfo &info) {
     // The 'daylight' int is obselete actually, but I'll include it here for
     // curiosity's sake. See the "Notes" section of "man tzset"
     obj.Set("daylight", daylight);
-
-    obj.Set("funkyChicken", "the funky chicken");
-
+#endif
     return obj;
 }
 
@@ -84,7 +103,6 @@ Napi::Value Time::localtime(const Napi::CallbackInfo &info) {
         obj.Set("dayOfWeek", timeinfo->tm_wday);
         obj.Set("dayOfYear", timeinfo->tm_yday);
         obj.Set("isDaylightSavings", (timeinfo->tm_isdst > 0));
-        obj.Set("xyz", "xyz");
 #if defined HAVE_TM_GMTOFF
         // Only available with glibc's "tm" struct. Most Linuxes, Mac OS X...
         obj.Set("gmtOffset", timeinfo->tm_gmtoff);
