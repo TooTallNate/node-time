@@ -8,8 +8,9 @@ sudo: false
 language: node_js
 
 node_js:
-  - "6.14.3"
+  - "8"
   - "10"
+  - "latest"
 
 install:
   - npm install
