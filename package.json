@@ -37,6 +37,5 @@
   },
   "devDependencies": {
     "mocha": "*"
-  },
-  "gypfile": true
+  }
 }
