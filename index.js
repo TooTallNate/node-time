@@ -5,12 +5,13 @@
 var debug = require('debug')('time')
   , fs = require('fs')
   , path = require('path')
-  , bindings = require('bindings')('time.node')
+  , time =  require('bindings')('time')
   , MILLIS_PER_SECOND = 1000
   , DAYS_OF_WEEK = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
   , MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
   , TZ_BLACKLIST = [ 'SystemV', 'Etc' ];
 
+var bindings = new time.Time();
 /**
  * Extends a "Date" constructor with node-time's extensions.
  * By default, `time.Date` is extended with this function.
@@ -38,9 +39,14 @@ exports.currentTimezone = process.env.TZ;
  * Export the raw functions from the bindings.
  */
 
-exports.time = bindings.time;
-exports.localtime = bindings.localtime;
-exports.mktime = bindings.mktime;
+exports.localtime = function(t) {
+  debug('calling native localtime');
+  return bindings.localtime(t);
+}
+exports.mktime = function(o) {
+  debug('calling native mktime');
+  return bindings.mktime(o);
+}
 
 /**
  * A "hack" of sorts to force getting our own Date instance.
