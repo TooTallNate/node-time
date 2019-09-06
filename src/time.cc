@@ -9,7 +9,7 @@ using namespace v8;
 
 class Time {
   public:
-  static void Init(Handle<Object> target) {
+  static void Init(Local<Object> target) {
     Nan::HandleScope scope;
 
     // time(3)
@@ -153,7 +153,7 @@ class Time {
 };
 
 extern "C" {
-  static void init (Handle<Object> target) {
+  static void init (Local<Object> target) {
     Time::Init(target);
   }
   NODE_MODULE(time, init)
