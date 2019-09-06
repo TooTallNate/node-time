@@ -84,7 +84,7 @@ class Time {
     Nan::EscapableHandleScope scope;
 
     // Construct the 'tm' struct
-    time_t rawtime = static_cast<time_t>(info[0]->IntegerValue());
+    time_t rawtime = static_cast<time_t>(info[0]->IntegerValue(Nan::GetCurrentContext()).FromJust());
     struct tm *timeinfo = localtime( &rawtime );
 
     // Create the return "Object"
@@ -138,13 +138,13 @@ class Time {
     Local<Object> arg = info[0].As<v8::Object>();
 
     struct tm tmstr;
-    tmstr.tm_sec   = Nan::Get(arg, Nan::New("seconds").ToLocalChecked()).ToLocalChecked()->Int32Value();
-    tmstr.tm_min   = Nan::Get(arg, Nan::New("minutes").ToLocalChecked()).ToLocalChecked()->Int32Value();
-    tmstr.tm_hour  = Nan::Get(arg, Nan::New("hours").ToLocalChecked()).ToLocalChecked()->Int32Value();
-    tmstr.tm_mday  = Nan::Get(arg, Nan::New("dayOfMonth").ToLocalChecked()).ToLocalChecked()->Int32Value();
-    tmstr.tm_mon   = Nan::Get(arg, Nan::New("month").ToLocalChecked()).ToLocalChecked()->Int32Value();
-    tmstr.tm_year  = Nan::Get(arg, Nan::New("year").ToLocalChecked()).ToLocalChecked()->Int32Value();
-    tmstr.tm_isdst = Nan::Get(arg, Nan::New("isDaylightSavings").ToLocalChecked()).ToLocalChecked()->Int32Value();
+    tmstr.tm_sec   = Nan::Get(arg, Nan::New("seconds").ToLocalChecked()).ToLocalChecked()->Int32Value(Nan::GetCurrentContext()).FromJust();
+    tmstr.tm_min   = Nan::Get(arg, Nan::New("minutes").ToLocalChecked()).ToLocalChecked()->Int32Value(Nan::GetCurrentContext()).FromJust();
+    tmstr.tm_hour  = Nan::Get(arg, Nan::New("hours").ToLocalChecked()).ToLocalChecked()->Int32Value(Nan::GetCurrentContext()).FromJust();
+    tmstr.tm_mday  = Nan::Get(arg, Nan::New("dayOfMonth").ToLocalChecked()).ToLocalChecked()->Int32Value(Nan::GetCurrentContext()).FromJust();
+    tmstr.tm_mon   = Nan::Get(arg, Nan::New("month").ToLocalChecked()).ToLocalChecked()->Int32Value(Nan::GetCurrentContext()).FromJust();
+    tmstr.tm_year  = Nan::Get(arg, Nan::New("year").ToLocalChecked()).ToLocalChecked()->Int32Value(Nan::GetCurrentContext()).FromJust();
+    tmstr.tm_isdst = Nan::Get(arg, Nan::New("isDaylightSavings").ToLocalChecked()).ToLocalChecked()->Int32Value(Nan::GetCurrentContext()).FromJust();
     // tm_wday and tm_yday are ignored for input, but properly set after 'mktime' is called
 
     info.GetReturnValue().Set(scope.Escape(Nan::New<v8::Number>(static_cast<double>(mktime( &tmstr )))));
