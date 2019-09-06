@@ -24,10 +24,10 @@ Example
 -------
 
 ``` javascript
-var time = require('time');
+const time = require('time');
 
 // Create a new Date instance, representing the current instant in time
-var now = new time.Date();
+const now = new time.Date();
 
 now.setTimezone("America/Los_Angeles");
 // `.getDate()`, `.getDay()`, `.getHours()`, etc.
@@ -39,7 +39,7 @@ now.setTimezone("America/New_York");
 
 
 // You can also set the timezone during instantiation
-var azDate = new time.Date(2010, 0, 1, 'America/Phoenix');
+const azDate = new time.Date(2010, 0, 1, 'America/Phoenix');
 azDate.getTimezone(); // 'America/Phoenix'
 ```
 
@@ -52,9 +52,9 @@ instances. To extend the global Date object, simply pass it in as an argument to
 the node-time module when requiring:
 
 ``` js
-var time = require('time')(Date);
+const time = require('time')(Date);
 
-var d = new Date();
+const d = new Date();
 d.setTimezone('UTC');
 ```
 
@@ -74,9 +74,9 @@ magic _timezone_ capabilities! You can also pass a `timezone` as the last
 argument in order to have a Date instance in the specified timezone.
 
 ``` javascript
-var now = new time.Date();
-var another = new time.Date('Aug 9, 1995', 'UTC');
-var more = new time.Date(1970, 0, 1, 'Europe/Amsterdam');
+const now = new time.Date();
+const another = new time.Date('Aug 9, 1995', 'UTC');
+const more = new time.Date(1970, 0, 1, 'Europe/Amsterdam');
 ```
 
 
@@ -93,19 +93,19 @@ instead the internal state of the Date instance is changed, such that the local
 date.setTimezone("America/Argentina/San_Juan")
 
 // Default behavior:
-a = new time.Date()
-a.toString()
+const a = new time.Date();
+a.toString();
 // 'Wed Aug 31 2011 09:45:31 GMT-0700 (PDT)'
-a.setTimezone('UTC')
-a.toString()
+a.setTimezone('UTC');
+a.toString();
 // 'Wed Aug 31 2011 16:45:31 GMT+0000 (UTC)'
 
 // Relative behavior:
-b = new time.Date()
-b.toString()
+const b = new time.Date();
+b.toString();
 // 'Wed Aug 31 2011 10:48:03 GMT-0700 (PDT)'
-b.setTimezone('UTC', true)
-b.toString()
+b.setTimezone('UTC', true);
+b.toString();
 // 'Wed Aug 31 2011 10:48:03 GMT+0000 (UTC)'
 ```
 
@@ -117,7 +117,7 @@ This must be called _after_ `setTimezone()` has been called.
 
 ``` javascript
 date.getTimezone();
-  // "America/Argentina/San_Juan"
+// "America/Argentina/San_Juan"
 ```
 
 
@@ -128,7 +128,7 @@ Useful for the presentation layer of a Date instance.
 
 ``` javascript
 date.getTimezoneAbbr();
-  // "ART"
+// "ART"
 ```
 
 
@@ -141,11 +141,11 @@ aliased as `time.parse()`.
 
 ``` javascript
 time.Date.parse("1970, January 1");  // <- Local Time
-  // 28800000
+// 28800000
 time.Date.parse("1970, January 1", "Europe/Copenhagen");
-  // -3600000
+// -3600000
 time.Date.parse("1970, January 1", "UTC");
-  // 0
+// 0
 ```
 
 
@@ -154,7 +154,7 @@ time.Date.parse("1970, January 1", "UTC");
 Transforms a "regular" Date instance into one of `node-time`'s "extended" Date instances.
 
 ``` javascript
-var d = new Date();
+const d = new Date();
 // `d.setTimezone()` does not exist...
 time.extend(d);
 d.setTimezone("UTC");
@@ -168,9 +168,9 @@ These two are equivalent:
 
 ``` javascript
 time.time();
-  // 1299827226
+// 1299827226
 Math.floor(Date.now() / 1000);
-  // 1299827226
+// 1299827226
 ```
 
 
@@ -184,9 +184,9 @@ for the specified timezone.
 
 ``` javascript
 time.tzset('US/Pacific');
-  // { tzname: [ 'PST', 'PDT' ],
-  //   timezone: 28800,
-  //   daylight: 1 }
+// { tzname: [ 'PST', 'PDT' ],
+//   timezone: 28800,
+//   daylight: 1 }
 ```
 
 
@@ -199,17 +199,17 @@ representation of the timestamp, according the the currently configured timezone
 
 ``` javascript
 time.localtime(Date.now()/1000);
-  // { seconds: 38,
-  //   minutes: 7,
-  //   hours: 23,
-  //   dayOfMonth: 10,
-  //   month: 2,
-  //   year: 111,
-  //   dayOfWeek: 4,
-  //   dayOfYear: 68,
-  //   isDaylightSavings: false,
-  //   gmtOffset: -28800,
-  //   timezone: 'PST' }
+// { seconds: 38,
+//   minutes: 7,
+//   hours: 23,
+//   dayOfMonth: 10,
+//   month: 2,
+//   year: 111,
+//   dayOfWeek: 4,
+//   dayOfYear: 68,
+//   isDaylightSavings: false,
+//   gmtOffset: -28800,
+//   timezone: 'PST' }
 ```
 
 
